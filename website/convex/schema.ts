@@ -22,4 +22,11 @@ export default defineSchema({
       selectOptions: v.optional(v.array(v.string())),
       type: v.string(),
     }),
+    highlights: defineTable({
+      id: v.number(),
+      title: v.string(),
+      description: v.string(),
+      timestamp:v.string(),
+      website: v.string(),
+    })
 });

@@ -17,6 +17,7 @@ import type {
 import type * as forms from "../forms.js";
 import type * as form_fields from "../form_fields.js";
 import type * as form_responses from "../form_responses.js";
+import type * as highlights from "../highlights.js";
 import type * as http from "../http.js";
 
 /**
@@ -31,6 +32,7 @@ declare const fullApi: ApiFromModules<{
   forms: typeof forms;
   form_fields: typeof form_fields;
   form_responses: typeof form_responses;
+  highlights: typeof highlights;
   http: typeof http;
 }>;
 export declare const api: FilterApi<

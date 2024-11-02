@@ -28,6 +28,7 @@
     "convex": "^1.11.3",
     "framer-motion": "^11.11.10",
     "lucide-react": "^0.378.0",
+    "mongoose": "^8.8.0",
     "next": "14.2.3",
     "openai": "^4.70.2",
     "react": "^18",

@@ -46,34 +46,24 @@ document.addEventListener("mouseup", async () => {
   const selectedText = window.getSelection().toString().trim();
   
   if (selectedText) {
+    const url = window.location.href;
+    const domain = new URL(url).hostname; // Extract the domain from the URL
+
     const data = {
-      text: selectedText,
+      id: Date.now(), // Unique ID
+      title: domain, // Set title to the domain
+      description: selectedText,
       timestamp: new Date().toISOString(),
-      url: window.location.href
+      website: url // Store the full URL
     };
 
-    // Retrieve existing highlights or initialize an empty array
-    chrome.storage.local.get({ highlights: [] }, async (result) => {
-      const highlights = result.highlights;
-      console.log("Highlights retrieved:", highlights.length);
-      highlights.push(data);
-      localStorage.setItem('highlights', JSON.stringify(highlights));
-
-      // Save the updated highlights array back to local storage
-      chrome.storage.local.set({ highlights }, () => {
-        console.log("Text highlight saved:", data);
-      });
-
-      // Open IndexedDB and add the highlight
-      try {
-        const db = await openDB();
-        await addHighlightToDB(db, data);
-        console.log("Text highlight saved to IndexedDB:", data);
-      } catch (error) {
-        console.error("Failed to save highlight to IndexedDB:", error);
-      }
-    });
+    // Open IndexedDB and add the highlight
+    try {
+      const db = await openDB();
+      await addHighlightToDB(db, data);
+      console.log("Text highlight saved to IndexedDB:", data);
+    } catch (error) {
+      console.error("Failed to save highlight to IndexedDB:", error);
+    }
   }
 });
-
-  

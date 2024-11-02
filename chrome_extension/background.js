@@ -9,4 +9,6 @@ chrome.runtime.onInstalled.addListener(() => {
       console.log("Highlighted text received:", request.data);
     }
   });
+
+  
   
