@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Highlights</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 10px; }
+    ul { padding: 0; list-style: none; }
+    li { margin-bottom: 10px; }
+  </style>
+</head>
+<body>
+  <h2>Captured Highlights</h2>
+  <ul id="highlight-list"></ul>
+  <button id="clear">Clear Highlights</button>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const highlightList = document.getElementById("highlight-list");
+      const clearButton = document.getElementById("clear");
+
+      // Load highlights from localStorage
+      const highlights = JSON.parse(localStorage.getItem("highlights")) || [];
+      highlights.forEach((highlight) => {
+        const listItem = document.createElement("li");
+        listItem.innerHTML = `<strong>Text:</strong> ${highlight.text}<br>
+                              <strong>Timestamp:</strong> ${highlight.timestamp}<br>
+                              <strong>URL:</strong> <a href="${highlight.url}" target="_blank">${highlight.url}</a>`;
+        highlightList.appendChild(listItem);
+      });
+
+      // Clear highlights when button is clicked
+      clearButton.addEventListener("click", () => {
+        localStorage.removeItem("highlights");
+        highlightList.innerHTML = "";
+      });
+    });
+  </script>
+</body>
+</html>
