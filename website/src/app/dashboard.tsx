@@ -13,7 +13,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Checkbox } from "@/components/ui/checkbox"
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from "@/components/ui/context-menu"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
-import { ChevronRight, Lock, Unlock, Search, Heart, GripVertical, Settings, Layers, History, Database, Pencil, ExternalLink, Trash2, ChevronDown } from 'lucide-react'
+import { ChevronRight, Lock, Unlock, Search, Heart, GripVertical, Settings, Layers, History, Database,Notebook, Pencil, ExternalLink, Trash2, ChevronDown,Home } from 'lucide-react'
 import { UserButton } from '@clerk/clerk-react'
 
 const sidebarData = [
@@ -213,60 +213,106 @@ export default function Dashboard() {
       )}
     </div>
   )
+// State to keep track of the currently selected page
+const [currentPage, setCurrentPage] = useState('home');
 
+const handlePageChange = (pageName) => {
+  setCurrentPage(pageName);
+  // Add any additional logic you want to perform on page change here
+};
   return (
     <TooltipProvider>
       <div className="flex h-screen  bg-white p-0 m-0 w-[100vw]">
         <div className="flex w-16 flex-col items-center justify-between border-r  py-4 overflow-hidden fixed h-screen">
           <div className="flex flex-col items-center space-y-4">
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-10 w-10">
-                  <Settings className="h-5 w-5" />
-                  <span className="sr-only">Settings</span>
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="right">
-                <p>Settings</p>
-              </TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-10 w-10">
-                  <Layers className="h-5 w-5" />
-                  <span className="sr-only">Integrations</span>
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="right">
-                <p>Integrations</p>
-              </TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-10 w-10">
-                  <History className="h-5 w-5" />
-                  <span className="sr-only">History</span>
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="right">
-                <p>History</p>
-              </TooltipContent>
-            </Tooltip>
-          </div>
+          <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon"
+            className={`h-10 w-10 ${currentPage === 'home' ? 'bg-gray-200' : ''}`}
+            onClick={() => handlePageChange('home')}
+          >
+            <Home className="h-5 w-5" />
+            <span className="sr-only">Home</span>
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent side="right">
+          <p>Home</p>
+        </TooltipContent>
+      </Tooltip>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon"
+            className={`h-10 w-10 ${currentPage === 'pages' ? 'bg-gray-200' : ''}`}
+            onClick={() => handlePageChange('pages')}
+          >
+            <Notebook className="h-5 w-5" />
+            <span className="sr-only">Pages</span>
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent side="right">
+          <p>Pages</p>
+        </TooltipContent>
+      </Tooltip>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon"
+            className={`h-10 w-10 ${currentPage === 'memory' ? 'bg-gray-200' : ''}`}
+            onClick={() => handlePageChange('memory')}
+          >
+            <Database className="h-5 w-5" />
+            <span className="sr-only">Memory</span>
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent side="right">
+          <p>Memory</p>
+        </TooltipContent>
+      </Tooltip>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon"
+            className={`h-10 w-10 ${currentPage === 'settings' ? 'bg-gray-200' : ''}`}
+            onClick={() => handlePageChange('settings')}
+          >
+            <Settings className="h-5 w-5" />
+            <span className="sr-only">Settings</span>
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent side="right">
+          <p>Settings</p>
+        </TooltipContent>
+      </Tooltip>
+    </div>
           <div className='py-5'>
           <UserButton />
           </div>
 
         </div>
-        <div className='ml-20'>
 
-        <ResizablePanelGroup direction="horizontal" className='fixed'>
+        <div className='ml-20'>
+          {
+            currentPage === 'home' && (
+              <div>
+                <h1>Home</h1>
+                <p>This is the home page</p>
+              </div>
+            )
+          }
+          {
+            currentPage === 'pages' && (
+              <ResizablePanelGroup direction="horizontal" className='fixed'>
           <ResizablePanel defaultSize={20} minSize={15}>
             <div className="flex h-full flex-col">
               <div className="border-b p-4">
                 <Input type="search" placeholder="Search articles..." className="w-full" />
               </div>
-              
               <ScrollArea className="flex-1">
                 {sidebarData.map(renderSidebarItem)}
               </ScrollArea>
@@ -413,6 +459,25 @@ export default function Dashboard() {
             </div>
           </ResizablePanel>
         </ResizablePanelGroup>
+            )
+          }
+          {
+            currentPage === 'memory' && (
+              <div>
+                <h1>Memory</h1>
+                <p>This is the memory page</p>
+              </div>
+            )
+          }
+          {
+            currentPage === 'settings' && (
+              <div>
+                <h1>Settings</h1>
+                <p>This is the settings page</p>
+              </div>
+            )
+          }
+        
         </div>
 
       </div>
