@@ -1,7 +1,7 @@
 "use client"
 import { useEffect, useState } from 'react';
 
-export default function Home() {
+export default function Memory() {
   const [highlights, setHighlights] = useState([]);
 
   useEffect(() => {

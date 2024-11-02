@@ -15,7 +15,7 @@ import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } 
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { ChevronRight, Lock, Unlock, Search, Heart, GripVertical, Settings, Layers, History, Database,Notebook, Pencil, ExternalLink, Trash2, ChevronDown,Home } from 'lucide-react'
 import { UserButton } from '@clerk/clerk-react'
-
+import Memory from './storage/page'
 const sidebarData = [
   { 
     id: 1, 
@@ -463,10 +463,7 @@ const handlePageChange = (pageName) => {
           }
           {
             currentPage === 'memory' && (
-              <div>
-                <h1>Memory</h1>
-                <p>This is the memory page</p>
-              </div>
+              <Memory/>
             )
           }
           {
