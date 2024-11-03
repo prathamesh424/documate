@@ -198,12 +198,7 @@ export default function CreatePage() {
             </Button>
         ))}
         </div>
-        <div className='absolute bottom-5 flex items-center'>
-
-      <p className='text-gray-400 text-sm '> Data tracked from the highlighted content will be used to generate the page, Checkout </p>
-      <Button variant='ghost' className='m-0 px-2 hover:bg-white hover:text-black'>Memory</Button>
-      <p className='text-gray-400 text-sm '>to view the Data stored</p>
-        </div>
+       
         
     </div>
   )

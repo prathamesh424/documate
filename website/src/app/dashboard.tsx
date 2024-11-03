@@ -261,7 +261,15 @@ const handlePageChange = (pageName) => {
         <div className='ml-20'>
           {
             currentPage === 'home' && (
-              <CreatePage/>
+              <div>
+                  <CreatePage/>
+                    <div className='absolute bottom-5 flex items-center justify-center w-[90vw]'>
+
+                    <p className='text-gray-400 text-sm '> Data tracked from the highlighted content will be used to generate the page, Checkout </p>
+                    <Button onClick={()=>{handlePageChange("memory")}} variant='ghost' className='m-0 px-2 hover:bg-white hover:text-black'>Memory</Button>
+                    <p className='text-gray-400 text-sm '>to view the Data stored</p>
+                  </div>
+              </div>
             )
           }
           {
