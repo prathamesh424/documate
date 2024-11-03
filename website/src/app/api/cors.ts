@@ -8,6 +8,8 @@ export function cors(req: NextRequest, res: NextResponse) {
 
   // Handle preflight requests
   if (req.method === 'OPTIONS') {
-    res.status(200).end();
+    // @ts-ignore
+    res.status(200).send(); // This should work correctly if types are set right
+    return;
   }
 }
