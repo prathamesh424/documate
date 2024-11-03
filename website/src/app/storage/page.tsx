@@ -35,7 +35,7 @@ import { Search, Square, SquareArrowOutUpRight, SquareCheckBigIcon, Trash2 } fro
 import { query } from '../../../convex/_generated/server'
 import { useMutation, useQuery } from 'convex/react'
 import { Badge } from '@/components/ui/badge'
-
+import { UserProfile ,useUser } from '@clerk/clerk-react'
 // Mock data structure
 interface DataItem {
   id: string
@@ -54,9 +54,11 @@ export default function DataTable() {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
   const [isSelectAll, setIsSelectAll] = useState(false)
   const [currentPage, setCurrentPage] = useState(1);
-  const data = useQuery(api.highlights.getHighlights, {});
+  const instance = useUser()
+  // const user_email =useUser().user.emailAddresses[0].emailAddress
+  const user_email = instance.user && instance.user.emailAddresses && instance.user.emailAddresses[0].emailAddress
+  const data = useQuery(api.highlights.getHighlights, {id: user_email  });
   const deleteHighlightMutation = useMutation(api.highlights.deleteHighlights);
-
   const paginatedData = data ? data
   .filter(item =>
     item.website.toLowerCase().includes(search.toLowerCase()) ||
@@ -71,6 +73,7 @@ export default function DataTable() {
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
+  
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value)
   }

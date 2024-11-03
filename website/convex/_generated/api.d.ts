@@ -19,6 +19,7 @@ import type * as form_fields from "../form_fields.js";
 import type * as form_responses from "../form_responses.js";
 import type * as highlights from "../highlights.js";
 import type * as http from "../http.js";
+import type * as pages from "../pages.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -34,6 +35,7 @@ declare const fullApi: ApiFromModules<{
   form_responses: typeof form_responses;
   highlights: typeof highlights;
   http: typeof http;
+  pages: typeof pages;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,

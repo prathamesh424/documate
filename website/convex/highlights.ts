@@ -24,8 +24,9 @@ export const addHighlight = mutation({
 
 // Query to get all highlights
 export const getHighlights = query({
-  handler: async (ctx) => {
-    return await ctx.db.query('highlights').collect();
+  args: { id: v.string() },
+  handler: async (ctx,args) => {
+    return await ctx.db.query('highlights').filter((q) => q.eq(q.field("id"), args.id)).collect();
   },
 });
 
@@ -38,5 +39,3 @@ export const deleteHighlights = mutation({
     }
   },
 });
-
-

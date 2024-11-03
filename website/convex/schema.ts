@@ -28,5 +28,27 @@ export default defineSchema({
       description: v.string(),
       timestamp:v.string(),
       website: v.string(),
-    })
+    }),
+    articles: defineTable({
+      id: v.string(), // Unique identifier for each article
+      title: v.string(), // Article title
+      author: v.string(), // Article author
+      date: v.string(), // Article date in ISO format
+      content: v.array(v.any()), // List of content blocks
+    }),
+    
+    // Define the structure of content blocks
+    contentBlocks: defineTable({
+      id: v.string(), // Unique identifier for each block
+      type: v.string(), // Type of content: paragraph, heading, table, code, image
+      text: v.optional(v.string()), // Optional text for paragraphs, headings
+      level: v.optional(v.number()), // Optional level for headings
+      data: v.optional(v.array(v.any())), // Optional data for tables
+      language: v.optional(v.string()), // Optional language for code
+      code: v.optional(v.string()), // Optional code snippet
+      src: v.optional(v.string()), // Optional image source
+      alt: v.optional(v.string()), // Optional image alt text
+      caption: v.optional(v.string()), // Optional image caption
+      originDataId: v.string(), // Reference to highlights table
+    }),
 });

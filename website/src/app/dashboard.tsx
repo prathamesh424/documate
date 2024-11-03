@@ -14,61 +14,13 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from "@/components/ui/context-menu"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { ChevronRight, Lock, Unlock, Search, Heart, GripVertical, Settings, Layers, History, Database,Notebook, Pencil, ExternalLink, Trash2, ChevronDown,Home } from 'lucide-react'
-import { UserButton } from '@clerk/clerk-react'
+import { UserButton, useUser } from '@clerk/clerk-react'
 import Memory from './storage/page'
 import SettingsPage from '@/components/settings/settings_page'
-const sidebarData = [
-  { 
-    id: 1, 
-    title: "React Basics", 
-    date: "2024-03-15", 
-    locked: false,
-    children: [
-      { id: 11, title: "Introduction to React", date: "2024-03-15", locked: false },
-      { id: 12, title: "Components and Props", date: "2024-03-16", locked: false },
-      { id: 13, title: "State and Lifecycle", date: "2024-03-17", locked: false },
-    ]
-  },
-  { id: 2, title: "Advanced React Patterns", date: "2024-03-20", locked: true },
-  { 
-    id: 3, 
-    title: "React Performance", 
-    date: "2024-03-25", 
-    locked: false,
-    children: [
-      { id: 31, title: "Optimization Techniques", date: "2024-03-25", locked: false },
-      { id: 32, title: "Profiling React Apps", date: "2024-03-26", locked: false },
-    ]
-  },
-]
-
-const initialArticleContent = {
-  title: "Introduction to React",
-  author: "Jane Doe",
-  date: "March 15, 2024",
-  content: [
-    { id: "1", type: "paragraph", text: "React is a popular JavaScript library for building user interfaces. It allows developers to create reusable UI components that can be composed to build complex applications.", originDataId: "text1" },
-    { id: "2", type: "heading", level: 2, text: "Key Concepts", originDataId: "text2" },
-    { id: "3", type: "paragraph", text: "Here are some key concepts in React:", originDataId: "text3" },
-    { id: "4", type: "table", data: [
-      ["Concept", "Description"],
-      ["Components", "Reusable pieces of UI"],
-      ["Props", "Data passed to components"],
-      ["State", "Internal component data"],
-      ["JSX", "Syntax extension for JavaScript"],
-    ], originDataId: "table1" },
-    { id: "5", type: "heading", level: 2, text: "Getting Started", originDataId: "text4" },
-    { id: "6", type: "paragraph", text: "To get started with React, you'll need to set up your development environment. Here's a simple example of a React component:", originDataId: "text5" },
-    { id: "7", type: "code", language: "jsx", code: `
-function Welcome(props) {
-  return <h1>Hello, {props.name}</h1>;
-}
-    `, originDataId: "code1" },
-    { id: "8", type: "image", src: "/placeholder.svg?height=300&width=500", alt: "React component example", caption: "A simple React component", originDataId: "image1" },
-    { id: "9", type: "paragraph", text: "This is just the beginning of what you can do with React. As you progress, you'll learn about more advanced concepts and techniques for building powerful web applications.", originDataId: "text6" },
-  ]
-}
-
+import { useQuery } from 'convex/react'
+import { api } from '../../convex/_generated/api'
+import { se } from 'date-fns/locale'
+import CreatePage from '@/components/home/create-page'
 const inputData = [
   { id: "text1", type: "text", content: "React is a popular JavaScript library for building user interfaces. It allows developers to create reusable UI components that can be composed to build complex applications.", description: "Introduction to React", url: "https://reactjs.org" },
   { id: "text2", type: "text", content: "Key Concepts", description: "React key concepts heading", url: "https://reactjs.org/docs/getting-started.html" },
@@ -82,12 +34,15 @@ const inputData = [
 ]
 
 export default function Dashboard() {
-  const [selectedArticle, setSelectedArticle] = useState(initialArticleContent)
+  const [selectedArticle, setSelectedArticle] = useState([])
   const [selectedDataCards, setSelectedDataCards] = useState<string[]>([])
   const [isSheetOpen, setIsSheetOpen] = useState(false)
   const sheetTriggerRef = useRef<HTMLButtonElement>(null)
   const [expandedSections, setExpandedSections] = useState<number[]>([])
-
+  const instance = useUser()
+  const user_email = instance.user && instance.user.emailAddresses && instance.user.emailAddresses[0].emailAddress
+  const pagesData = useQuery(api.pages.getPages, {author: user_email||""  });
+  const sidebarData = pagesData ? pagesData.map((item)=>{ return {id:item._id , title: item.title , date : item.date , locked : item.islocked|| false}}) : []
   const cardRefs = useRef<{ [key: string]: HTMLDivElement | null }>({})
 
   const onDragEnd = (result) => {
@@ -102,7 +57,12 @@ export default function Dashboard() {
       content: items
     })
   }
-
+  // useEffect(() => {
+  //   if (sidebarData) {
+  //     console.log(sidebarData)
+  //     setSelectedArticle(sidebarData&&sidebarData[0])
+  //   }
+  // }, [sidebarData])
   const renderContent = (item) => {
     switch (item.type) {
       case 'paragraph':
@@ -130,7 +90,7 @@ export default function Dashboard() {
         )
       case 'code':
         return (
-          <pre className="mb-4 overflow-x-auto rounded bg-muted p-4">
+          <pre className="mb-4 overflow-x-auto rounded bg-gray-300 p-4">
             <code>{item.code}</code>
           </pre>
         )
@@ -200,16 +160,17 @@ export default function Dashboard() {
       ) : (
         <Button
           variant="ghost"
-          className="w-full justify-start p-2"
-          onClick={() => setSelectedArticle(initialArticleContent)}
+          className={`w-full justify-start p-2 py-6 ${selectedArticle.id === item.id ? 'bg-gray-200' : ''}`}
+          onClick={() => setSelectedArticle(item)}
         >
-          <div className="flex w-full items-center justify-between">
+        <div className="relative flex flex-col py-2 w-full items-start justify-between">
+          <div className="flex w-full items-between space-x-2">
             <span className="truncate">{item.title}</span>
-            <div className="flex items-center space-x-2">
-              <span className="text-xs text-muted-foreground">{item.date}</span>
-              {item.locked ? <Lock className="h-4 w-4" /> : <Unlock className="h-4 w-4" />}
-            </div>
           </div>
+          <span className="text-xs text-muted-foreground">{item.date}</span>
+          {item.locked ? <Lock className="absolute top-2 right-1 h-4 w-4" /> : <Unlock className="absolute top-2 right-1 h-4 w-4" />}
+        </div>
+
         </Button>
       )}
     </div>
@@ -300,10 +261,7 @@ const handlePageChange = (pageName) => {
         <div className='ml-20'>
           {
             currentPage === 'home' && (
-              <div>
-                <h1>Home</h1>
-                <p>This is the home page</p>
-              </div>
+              <CreatePage/>
             )
           }
           {
@@ -315,7 +273,8 @@ const handlePageChange = (pageName) => {
                 <Input type="search" placeholder="Search articles..." className="w-full" />
               </div>
               <ScrollArea className="flex-1">
-                {sidebarData.map(renderSidebarItem)}
+                {sidebarData&&sidebarData.map(renderSidebarItem)}
+                
               </ScrollArea>
             </div>
           </ResizablePanel>
@@ -323,6 +282,7 @@ const handlePageChange = (pageName) => {
             <div className="flex h-full flex-col ">
               <header className="flex items-center justify-around border-b p-4">
                 <div>
+
                   <h1 className="text-2xl font-bold">{selectedArticle.title}</h1>
                   <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                     <span>{selectedArticle.author}</span>
@@ -415,7 +375,9 @@ const handlePageChange = (pageName) => {
                     <Droppable droppableId="article-content">
                       {(provided) => (
                         <div {...provided.droppableProps} ref={provided.innerRef}>
-                          {selectedArticle.content.map((item, index) => (
+                          {/* {JSON.stringify(selectedArticle)} */}
+                         
+                          {pagesData?.find((item) => item._id === selectedArticle?.id)?.content.map((item, index) => (
                             <Draggable key={item.id} draggableId={item.id} index={index}>
                               {(provided, snapshot) => (
                                 <ContextMenu>
