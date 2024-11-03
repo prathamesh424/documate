@@ -198,6 +198,16 @@ export default function CreatePage() {
         {/* Button configs and rendering */}
 
         <div className="flex space-x-4 grid grid-cols-3 gap-4">
+            {!result&&
+                [1,2,3].map((button) => (
+                    <Button
+                        key={button}
+                        disabled={true}
+                        className="animate-pulse bg-gray-300 w-[200px] text-gray-800 hover:border-gray-300 hover:shadow-md transition-all px-4 py-2 text-sm font-normal"
+                    >
+                    </Button>
+                ))
+            }
         {result&&result.choices&&result.choices[0] &&result.choices[0].message && result.choices[0].message.content.split('\n')
         .filter(line => /^\d+\.\s/.test(line)) // Check if the line starts with a number and a dot
         .map(line => line.split('. ')[1].replace(/"/g, '').trim()).slice(0, 6).map((button) => (
