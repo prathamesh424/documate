@@ -29,6 +29,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Search, Square, SquareArrowOutUpRight, SquareCheckBigIcon, Trash2 } from "lucide-react"
 import { query } from '../../../convex/_generated/server'
 import { useMutation, useQuery } from 'convex/react'
+import { Badge } from '@/components/ui/badge'
 
 // Mock data structure
 interface DataItem {
@@ -161,11 +162,11 @@ export default function DataTable() {
         </Button>
       </div>
 
+     {data&& data.length ?
       <>
       <Table className="w-[90vw] divide-y divide-gray-200">
         <thead>
           <tr>
-            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/12">Select</th>
             <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-2/12">Title</th>
             <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-6/12">Description</th>
             <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-2/12">Creation Time</th>
@@ -175,15 +176,16 @@ export default function DataTable() {
         <tbody className="bg-white divide-y divide-gray-200">
           {paginatedData.map(item => (
             <tr key={item._id}>
-              <td className="px-6 py-4 whitespace-nowrap">
+             
+              <td className="px-6 py-4 whitespace-nowrap ">
+                <div className="text-sm text-gray-900 truncate ">
                 <Checkbox
-                className='border border-3xl shadow'
+                className='border border-3xl shadow mr-2'
                   checked={selectedItems.includes(item._id)}
                   onCheckedChange={() => handleSelect(item._id)}
                 />
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <div className="text-sm text-gray-900 truncate">{"titlee"}</div>
+                  <Badge className="ml-2">{item.title}</Badge>
+                  </div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
                 <div className="text-sm text-gray-900">{truncateDescription(item.description)}</div>
@@ -192,7 +194,7 @@ export default function DataTable() {
                 <div className="text-sm text-gray-500">{formatCreationTime(item._creationTime)}</div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
-                <a href={item.website} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline truncate w-full">
+                <a href={item.website} target="_blank" rel="noopener noreferrer" className="text-black hover:underline truncate w-full">
                   <SquareArrowOutUpRight />
                 </a>
               </td>
@@ -215,6 +217,10 @@ export default function DataTable() {
         onPageChange={handlePageChange}
       />
     </>
+    :
+    <div className="flex justify-center items-center h-96 w-[90vw]">
+      <p className="text-gray-500">No data available</p>
+      </div>}
 
       <Dialog open={isDeleteDialogOpen}  onOpenChange={setIsDeleteDialogOpen}>
         <DialogContent className='bg-white'>

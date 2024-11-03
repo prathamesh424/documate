@@ -1,45 +1,5 @@
-// Open (or create) the database
-function openDB() {
-  return new Promise((resolve, reject) => {
-    const request = indexedDB.open("highlightsDB", 1);
-
-    request.onerror = (event) => {
-      console.error("Database error:", event.target.errorCode);
-      reject(event.target.errorCode);
-    };
-
-    request.onsuccess = (event) => {
-      console.log("Database opened successfully");
-      resolve(event.target.result);
-    };
-
-    request.onupgradeneeded = (event) => {
-      const db = event.target.result;
-      if (!db.objectStoreNames.contains("highlights")) {
-        db.createObjectStore("highlights", { keyPath: "id", autoIncrement: true });
-      }
-    };
-  });
-}
-
-// Add a highlight to IndexedDB
-function addHighlightToDB(db, data) {
-  return new Promise((resolve, reject) => {
-    const transaction = db.transaction(["highlights"], "readwrite");
-    const store = transaction.objectStore("highlights");
-    const request = store.add(data);
-
-    request.onsuccess = () => {
-      console.log("Highlight added to the database");
-      resolve();
-    };
-
-    request.onerror = (event) => {
-      console.error("Error adding highlight to the database", event.target.errorCode);
-      reject(event.target.errorCode);
-    };
-  });
-}
+// Define the domain variable
+const API_DOMAIN = 'http://localhost:3000';
 
 // Listen for mouseup events to detect when text is highlighted
 document.addEventListener("mouseup", async () => {
@@ -57,13 +17,15 @@ document.addEventListener("mouseup", async () => {
       website: url // Store the full URL
     };
 
-    // Open IndexedDB and add the highlight
-    try {
-      const db = await openDB();
-      await addHighlightToDB(db, data);
-      console.log("Text highlight saved to IndexedDB:", data);
-    } catch (error) {
-      console.error("Failed to save highlight to IndexedDB:", error);
-    }
+    console.log("Highlight data:", data);
+    
+    // Send the highlight data to the background script
+    chrome.runtime.sendMessage({ type: 'SAVE_HIGHLIGHT', payload: data }, (response) => {
+      if (response.status === 'success') {
+        console.log("Highlight data sent to background script successfully.");
+      } else {
+        console.error("Failed to send highlight data to background script.");
+      }
+    });
   }
 });
