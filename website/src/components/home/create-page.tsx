@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Search, Settings } from 'lucide-react'
+import { Search, Settings, StarsIcon } from 'lucide-react'
 
 export default function CreatePage() {
   const [searchQuery, setSearchQuery] = useState('')
@@ -68,7 +68,7 @@ export default function CreatePage() {
       },
   ];
   return (
-    <div className="w-[90vw] bg-white flex flex-col items-center justify-center p-4">
+    <div className="w-[90vw] bg-white flex h-screen flex-col items-center justify-center p-4">
       <div className="w-full max-w-[584px] mb-8">
         <h1 className="text-[60px] font-normal mb-8 text-center">
           <span className="text-black">Provide a page title</span>
@@ -84,12 +84,13 @@ export default function CreatePage() {
             placeholder="Enter the document title"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full h-12 pl-12 pr-4 rounded-full border border-gray-200 focus:outline-none focus:border-gray-300 focus:ring-2 focus:ring-gray-200 shadow-sm"
+            className="w-full h-12 bg-white pl-12 pr-4 rounded-full border border-gray-200 focus:outline-none focus:border-gray-300 focus:ring-2 focus:ring-gray-200 shadow-sm "
           />
-          <Search className="absolute left-4 top-3.5 h-5 w-5 text-gray-400" />
+          <StarsIcon className="absolute left-4 top-3.5 h-5 w-5 text-gray-400" />
           <Settings className="absolute right-4 top-3.5 h-5 w-5 text-gray-400 cursor-pointer" />
         </div>
       </div>
+
       <div className="flex space-x-4 grid grid-cols-3 gap-4">
         {buttonConfigs.map((button) => (
             <Button
@@ -102,6 +103,13 @@ export default function CreatePage() {
             </Button>
         ))}
         </div>
+        <div className='absolute bottom-5 flex items-center'>
+
+      <p className='text-gray-400 text-sm '> Data tracked from the highlighted content will be used to generate the page, Checkout </p>
+      <Button variant='ghost' className='m-0 px-2 hover:bg-white hover:text-black'>Memory</Button>
+      <p className='text-gray-400 text-sm '>to view the Data stored</p>
+        </div>
+        
     </div>
   )
 }
