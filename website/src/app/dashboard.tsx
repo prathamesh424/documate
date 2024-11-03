@@ -42,7 +42,7 @@ export default function Dashboard() {
   const instance = useUser()
   const user_email = instance.user && instance.user.emailAddresses && instance.user.emailAddresses[0].emailAddress
   const pagesData = useQuery(api.pages.getPages, {author: user_email||""  });
-  const sidebarData = pagesData ? pagesData.map((item)=>{ return {id:item._id , title: item.title , date : item.date , locked : item.islocked|| false}}) : []
+  const sidebarData = pagesData ? pagesData.map((item)=>{ return {id:item._id , title: item.title , date : item.date , locked :  false}}) : []
   const cardRefs = useRef<{ [key: string]: HTMLDivElement | null }>({})
 
   const onDragEnd = (result) => {
