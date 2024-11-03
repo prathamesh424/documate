@@ -16,6 +16,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { ChevronRight, Lock, Unlock, Search, Heart, GripVertical, Settings, Layers, History, Database,Notebook, Pencil, ExternalLink, Trash2, ChevronDown,Home } from 'lucide-react'
 import { UserButton } from '@clerk/clerk-react'
 import Memory from './storage/page'
+import SettingsPage from '@/components/settings/settings_page'
 const sidebarData = [
   { 
     id: 1, 
@@ -468,10 +469,7 @@ const handlePageChange = (pageName) => {
           }
           {
             currentPage === 'settings' && (
-              <div>
-                <h1>Settings</h1>
-                <p>This is the settings page</p>
-              </div>
+              <SettingsPage/>
             )
           }
         
