@@ -50,6 +50,7 @@ export const addArticle = mutation({
         data: v.optional(v.array(v.array(v.string()))), // Optional for tables
         src: v.optional(v.string()), // Optional for images
         alt: v.optional(v.string()), // Optional for images
+        level: v.optional(v.any()), // Optional for images
         caption: v.optional(v.string()), // Optional for images
       })),
     },
@@ -129,7 +130,12 @@ export const addArticle = mutation({
       return await ctx.db.query('articles').filter((q) => q.eq(q.field("author"), args.author)).collect();
     },
   });
-  
+  export const getContentBlock = query({
+    args: { id: v.string() },
+    handler: async (ctx,args) => {
+      return await ctx.db.query('contentBlocks').filter((q) => q.eq(q.field("id"), args.id)).first();
+    },
+  });
 const prompt_text=`
 You are tasked with transforming the provided data into a specific structured format for an article. The desired format is as follows:
 

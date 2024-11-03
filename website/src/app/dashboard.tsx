@@ -63,46 +63,51 @@ export default function Dashboard() {
   //     setSelectedArticle(sidebarData&&sidebarData[0])
   //   }
   // }, [sidebarData])
-  const renderContent = (item) => {
-    switch (item.type) {
-      case 'paragraph':
-        return <p className="mb-4">{item.text}</p>
-      case 'heading':
-        const Heading = `h${item.level}` as keyof JSX.IntrinsicElements
-        return <Heading className="mb-4 mt-6 font-bold">{item.text}</Heading>
-      case 'table':
-        return (
-          <div className="mb-6 overflow-x-auto">
-            <table className="w-full border-collapse border">
-              <tbody>
-                {item.data.map((row, rowIndex) => (
-                  <tr key={rowIndex}>
-                    {row.map((cell, cellIndex) => (
-                      <td key={cellIndex} className="border p-2">
-                        {cell}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )
-      case 'code':
-        return (
-          <pre className="mb-4 overflow-x-auto rounded bg-gray-300 p-4">
-            <code>{item.code}</code>
-          </pre>
-        )
-      case 'image':
-        return (
-          <figure className="mb-6">
-            <img src={item.src} alt={item.alt} className="w-full rounded-lg" />
-            {item.caption && <figcaption className="mt-2 text-center text-sm text-muted-foreground">{item.caption}</figcaption>}
-          </figure>
-        )
-      default:
-        return null
+  const renderContent = (blockid) => {
+    const item = useQuery(api.pages.getContentBlock, { id: blockid });
+
+    console.log("content block gave",item)
+    if(item){
+      switch (item.type) {
+        case 'paragraph':
+          return <p className="mb-4">{item.text}</p>
+        case 'heading':
+          const Heading = `h${item.level}` as keyof JSX.IntrinsicElements
+          return <Heading className="mb-4 mt-6 font-bold">{item.text}</Heading>
+        case 'table':
+          return (
+            <div className="mb-6 overflow-x-auto">
+              <table className="w-full border-collapse border">
+                <tbody>
+                  {item.data.map((row, rowIndex) => (
+                    <tr key={rowIndex}>
+                      {row.map((cell, cellIndex) => (
+                        <td key={cellIndex} className="border p-2">
+                          {cell}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )
+        case 'code':
+          return (
+            <pre className="mb-4 overflow-x-auto rounded bg-gray-300 p-4">
+              <code>{item.code}</code>
+            </pre>
+          )
+        case 'image':
+          return (
+            <figure className="mb-6">
+              <img src={item.src} alt={item.alt} className="w-full rounded-lg" />
+              {item.caption && <figcaption className="mt-2 text-center text-sm text-muted-foreground">{item.caption}</figcaption>}
+            </figure>
+          )
+        default:
+          return null
+      }
     }
   }
 
@@ -178,8 +183,8 @@ export default function Dashboard() {
 // State to keep track of the currently selected page
 const [currentPage, setCurrentPage] = useState('home');
 
-const handlePageChange = (pageName) => {
-  setCurrentPage(pageName);
+const handlePageChange = (page:string) => {
+  setCurrentPage(page);
   // Add any additional logic you want to perform on page change here
 };
   return (
@@ -262,7 +267,7 @@ const handlePageChange = (pageName) => {
           {
             currentPage === 'home' && (
               <div>
-                  <CreatePage/>
+                  <CreatePage handlePageChange={handlePageChange}/>
                     <div className='absolute bottom-5 flex items-center justify-center w-[90vw]'>
 
                     <p className='text-gray-400 text-sm '> Data tracked from the highlighted content will be used to generate the page, Checkout </p>
