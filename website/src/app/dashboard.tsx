@@ -57,24 +57,57 @@ export default function Dashboard() {
       content: items
     })
   }
+  const preprocessText = (text: string): React.ReactNode => {
+    // Split the text into parts using regular expression to match bold markers and <|im_end|>
+    const parts = text.split(/(\*\*[^*]+\*\*|<\|im_end\|>)/g);
+  
+    // Filter and map the parts
+    return parts.map((part, index) => {
+      if (part === '<|im_end|>') {
+        // Ignore parts that match <|im_end\|>
+        return null;
+      } else if (part.startsWith('**') && part.endsWith('**')) {
+        // Make text bold if enclosed in **
+        return <strong key={index}>{part.slice(2, -2)}</strong>;
+      } else {
+        // Return the part as is
+        return part;
+      }
+    });
+  };
+  
+  
   // useEffect(() => {
   //   if (sidebarData) {
   //     console.log(sidebarData)
   //     setSelectedArticle(sidebarData&&sidebarData[0])
   //   }
   // }, [sidebarData])
+  function isHeadingFormat(word) {
+    const regex = /^heading\d+$/;
+    return regex.test(word);
+  }
   const renderContent = (blockid) => {
     /* eslint-disable react-hooks/rules-of-hooks */
     const item = useQuery(api.pages.getContentBlock, { id: blockid });
 
     console.log("content block gave",item)
+    let Heading = `h${1}` as keyof JSX.IntrinsicElements
     if(item){
       switch (item.type) {
         case 'paragraph':
-          return <p className="mb-4">{item.text}</p>
+          return <p className="mb-4">{preprocessText(item.text)}</p>
+        case 'heading1':
+          case 'heading0':
         case 'heading':
-          const Heading = `h${item.level}` as keyof JSX.IntrinsicElements
+          Heading = `h${1}` as keyof JSX.IntrinsicElements
+          return <Heading className="mb-4 mt-6 font-bold text-2xl">{item.text} </Heading>
+        case 'heading2':
+           Heading = `h${2}` as keyof JSX.IntrinsicElements
           return <Heading className="mb-4 mt-6 font-bold">{item.text}</Heading>
+          case 'heading3':
+            Heading = `h${3}` as keyof JSX.IntrinsicElements
+           return <Heading className="mb-4 mt-6 font-bold">{item.text}</Heading>
         case 'table':
           return (
             <div className="mb-6 overflow-x-auto">
@@ -107,7 +140,7 @@ export default function Dashboard() {
             </figure>
           )
         default:
-          return null
+          return <p>{JSON.stringify(item)}</p>
       }
     }
   }

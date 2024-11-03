@@ -39,60 +39,85 @@ type MarkdownEntry = {
 };
 
 const parseMarkdown = (markdownText: string): MarkdownEntry[] => {
-  const md = new MarkdownIt();
-  const tokens = md.parse(markdownText, {});
-
-  const entries: MarkdownEntry[] = [];
-
-  tokens.forEach((token) => {
-    if (token.type === 'heading_open') {
-      const level = parseInt(token.tag.replace('h', ''), 10);
-      const textToken = tokens[tokens.indexOf(token) + 1]; // Get the text token
-      if (textToken && textToken.type === 'inline') {
-        entries.push({
-          id: uuidv4(),
-          level,
-          originDataId: '',
-          text: textToken.content,
-          type: 'heading',
+    const md = new MarkdownIt();
+    const tokens = md.parse(markdownText, {});
+  
+    const entries: MarkdownEntry[] = [];
+    console.log("tokens are ",tokens)
+    for (let i = 0; i < tokens.length; i++) {
+      const token = tokens[i];
+      
+      if (token.type === 'heading_open') {
+        const level = parseInt(token.tag.replace('h', ''), 10);
+        const textToken = tokens[i + 1]; // Get the text token
+        if (textToken && textToken.type === 'inline') {
+          const textContent = textToken.content;
+          // Remove all # characters and trim the resulting text
+          const cleanedText = textContent.replace(/#/g, '').trim();
+          // Count the number of # characters
+          const level = (textContent.match(/#/g) || []).length;
+          entries.push({
+            id: uuidv4(),
+            level,
+            originDataId: '',
+            text: cleanedText,
+            type: `heading${level}`,
+          });
+          i=i+2
+        }
+      } else if (token.type === 'inline') {
+        if (token.content.trim()) {
+          entries.push({
+            id: uuidv4(),
+            originDataId: '',
+            text: token.content,
+            type: 'paragraph',
+          });
+        }
+      } else if (token.type === 'bullet_list_open') {
+        const listItems = [];
+        // Loop through tokens until we find the closing tag for the bullet list
+        for (let j = i + 1; j < tokens.length; j++) {
+          if (tokens[j].type === 'list_item_open') {
+            const listItemContent = tokens[j + 1];
+            if (listItemContent && listItemContent.type === 'inline') {
+              listItems.push(listItemContent.content);
+            }
+          } else if (tokens[j].type === 'bullet_list_close') {
+            i = j; // Update the outer loop index to skip past the bullet list
+            break; // Stop when we reach the end of the list
+          }
+        }
+        // Add list items as paragraphs
+        listItems.forEach((item) => {
+          entries.push({
+            id: uuidv4(),
+            originDataId: '',
+            text: item,
+            type: 'paragraph',
+          });
         });
-      }
-    } else if (token.type === 'inline') {
-      if (token.content.trim()) {
+      } else if (token.type === 'fence') {
+        // Handle code blocks
         entries.push({
           id: uuidv4(),
           originDataId: '',
           text: token.content,
-          type: 'paragraph',
+          type: 'code',
         });
-      }
-    } else if (token.type === 'bullet_list_open') {
-      const listItems: string[] = [];
-      // Loop through tokens until we find the closing tag for the bullet list
-      for (let i = tokens.indexOf(token) + 1; i < tokens.length; i++) {
-        if (tokens[i].type === 'list_item_open') {
-          const listItemContent = tokens[i + 1];
-          if (listItemContent && listItemContent.type === 'inline') {
-            listItems.push(listItemContent.content);
-          }
-        } else if (tokens[i].type === 'bullet_list_close') {
-          break; // Stop when we reach the end of the list
-        }
-      }
-      // Add list items as paragraphs
-      listItems.forEach((item) => {
+      } else if (token.type === 'image') {
+        // Handle images
         entries.push({
           id: uuidv4(),
           originDataId: '',
-          text: item,
-          type: 'paragraph',
+          text: token.attrs?.find(attr => attr[0] === 'src')?.[1] || '', // Get the image URL
+          type: 'image',
         });
-      });
+      }
     }
-  });
-
-  return entries;
-};
+    
+    return entries;
+  };
 import AnimatedCircularProgressBar from '../ui/animated-circular-progress-bar'
 const openai = new OpenAI({ 
   baseURL: "https://api.rhymes.ai/v1", 
@@ -189,7 +214,7 @@ interface CreatePageProps {
   const GeneratePage = async (searchQuery:any) => {
     setIsLoading(true)
     setValue(0)
-    const system_prompt="Create a docuement form the below text with the content "+searchQuery +" give the docment in a markdown format "
+    const system_prompt="Create a docuement form the below text with the content "+searchQuery +" give the docment in a markdown format make sure to add headings , paragraphs , code and tables where ever required make sure that the entire document is well structured and easy to read and straight to point"
     const user_prompt = data ? data.map((item) => item.description).join('') : '';
     try {
       const response = await openai.chat.completions.create({

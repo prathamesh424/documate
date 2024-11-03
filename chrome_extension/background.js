@@ -1,5 +1,5 @@
 // Define the domain variable
-const API_DOMAIN = 'http://localhost:3000';
+const API_DOMAIN = 'https://documateit.vercel.app';
 
 // Function to send highlight data to the API
 async function sendHighlightToEndpoint(data) {

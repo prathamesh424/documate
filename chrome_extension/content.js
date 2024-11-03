@@ -1,5 +1,5 @@
 // Define the domain variable
-const API_DOMAIN = 'http://localhost:3000';
+const API_DOMAIN = 'https://documateit.vercel.app';
 
 // Listen for mouseup events to detect when text is highlighted
 document.addEventListener("mouseup", async () => {
