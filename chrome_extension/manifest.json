@@ -1,6 +1,6 @@
 {
     "manifest_version": 3,
-    "name": "Highlight Capture",
+    "name": "DocuMate",
     "version": "1.0",
     "description": "Capture highlighted text along with timestamp and URL.",
     "permissions": ["storage", "activeTab", "scripting"],

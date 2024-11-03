@@ -9,7 +9,12 @@ import { api } from '../../../convex/_generated/api'
 import { Id } from 'convex/schema'
 import { Table } from "@/components/ui/table"
 import { formatDistanceToNow, format } from 'date-fns';
-
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 import {
   Select,
   SelectContent,
@@ -110,8 +115,9 @@ export default function DataTable() {
 
   const truncateDescription = (description: string) => {
     const words = description.split(' ')
-    if (words.length > 10) {
-      return words.slice(0, 10).join(' ') + '...'
+    const letters = description.split('')
+    if (letters.length > 60) {
+      return letters.slice(0, 60).join('') + '...'
     }
     return description
   }
@@ -164,7 +170,7 @@ export default function DataTable() {
 
      {data&& data.length ?
       <>
-      <Table className="w-[90vw] divide-y divide-gray-200">
+      <Table className="w-[90vw] divide-y z-[0] divide-gray-200">
         <thead>
           <tr>
             <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-2/12">Title</th>
@@ -188,7 +194,23 @@ export default function DataTable() {
                   </div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
-                <div className="text-sm text-gray-900">{truncateDescription(item.description)}</div>
+                <div className="text-sm text-gray-900">
+                            <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                    {/* {truncateDescription(item.description)} */}
+                      <Button variant="ghost" className='hover:bg-white hover:text-black'>{truncateDescription(item.description)}</Button>
+                    </TooltipTrigger>
+                    <TooltipContent className='bg-white'>
+                      <div className='bg-white text-black' style={{ width: '300px', overflowWrap: 'break-word', whiteSpace: 'normal' }}>
+                        {item.description}
+                      </div>
+                    </TooltipContent>
+
+
+                  </Tooltip>
+                </TooltipProvider>
+                            </div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
                 <div className="text-sm text-gray-500">{formatCreationTime(item._creationTime)}</div>

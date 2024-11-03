@@ -23,7 +23,7 @@ export default defineSchema({
       type: v.string(),
     }),
     highlights: defineTable({
-      id: v.number(),
+      id: v.string(),
       title: v.string(),
       description: v.string(),
       timestamp:v.string(),

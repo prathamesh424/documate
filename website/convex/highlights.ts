@@ -4,7 +4,7 @@ import { ConvexError, v } from 'convex/values';
 // Mutation to add a highlight
 export const addHighlight = mutation({
   args: {
-    id: v.number(),
+    id: v.string(),
     title: v.string(),
     description: v.string(),
     timestamp:v.string(),
