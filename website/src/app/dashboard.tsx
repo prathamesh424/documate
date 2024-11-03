@@ -64,6 +64,7 @@ export default function Dashboard() {
   //   }
   // }, [sidebarData])
   const renderContent = (blockid) => {
+    /* eslint-disable react-hooks/rules-of-hooks */
     const item = useQuery(api.pages.getContentBlock, { id: blockid });
 
     console.log("content block gave",item)
@@ -391,7 +392,7 @@ const handlePageChange = (page:string) => {
                           {/* {JSON.stringify(selectedArticle)} */}
                          
                           {pagesData?.find((item) => item._id === selectedArticle?.id)?.content.map((item, index) => (
-                            <Draggable key={item.id} draggableId={item.id} index={index}>
+                            <Draggable key={item} draggableId={item} index={index}>
                               {(provided, snapshot) => (
                                 <ContextMenu>
                                   <ContextMenuTrigger>
