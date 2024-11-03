@@ -10,7 +10,7 @@ export default function UpgradeYourPlan() {
 				<div className="mx-auto flex max-w-6xl flex-col items-center justify-center py-10">
 					<MagicBadge title="Upgrade your plan" />
 					<p className="mt-6 text-center font-semibold text-2xl md:text-4xl lg:text-4xl">
-						You're one step away from unlocking the full power of AI for your
+						Youre one step away from unlocking the full power of AI for your
 						blog posts. Upgrade to Basic or Pro Plan now!
 					</p>
 					<Link href="/pricing">

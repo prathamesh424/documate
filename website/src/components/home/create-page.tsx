@@ -311,7 +311,7 @@ interface CreatePageProps {
      .filter(line => /^\d+\.\s/.test(line)) // Check if the line starts with a number and a dot
      .map(line => line.split('. ')[1].replace(/"/g, '').trim()).slice(0, 6).map((button) => (
          <Button
-         // key={button.key}
+         key={button}
          // onClick={button.onClick}
          onClick={()=>{setSearchQuery(button)}}
          // disabled={button.disabled}
