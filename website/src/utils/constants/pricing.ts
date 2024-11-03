@@ -1,6 +1,6 @@
 export const ORIGIN_URL =
 	process.env.NODE_ENV === "development"
-		? "http://localhost:3000"
+		? "https://documateit.vercel.app"
 		: `${process.env.PRODUCTION_ORIGIN_URL}`;
 
 export const PLANS = [

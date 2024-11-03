@@ -23,7 +23,7 @@ npm run dev
 This will configure a Convex project if you don't already have one, open the
 Convex dashboard and the web app running on `localhost`.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [https://documateit.vercel.app](https://documateit.vercel.app) with your browser to see the result.
 
 
 
