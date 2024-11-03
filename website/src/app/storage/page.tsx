@@ -6,6 +6,10 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Query } from 'convex/server'
 import { api } from '../../../convex/_generated/api'
+import { Id } from 'convex/schema'
+import { Table } from "@/components/ui/table"
+import { formatDistanceToNow, format } from 'date-fns';
+
 import {
   Select,
   SelectContent,
@@ -22,9 +26,9 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Search, Trash2 } from "lucide-react"
+import { Search, Square, SquareArrowOutUpRight, SquareCheckBigIcon, Trash2 } from "lucide-react"
 import { query } from '../../../convex/_generated/server'
-import { useQuery } from 'convex/react'
+import { useMutation, useQuery } from 'convex/react'
 
 // Mock data structure
 interface DataItem {
@@ -39,81 +43,51 @@ export default function DataTable() {
   // const [data, setData] = useState<DataItem[]>([])
   const [search, setSearch] = useState('')
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
-  const [selectedItems, setSelectedItems] = useState<string[]>([])
+  const itemsPerPage = 20;
+  const [selectedItems, setSelectedItems] = useState<Id<"highlights">[]>([])
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+  const [isSelectAll, setIsSelectAll] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1);
   const data = useQuery(api.highlights.getHighlights, {});
+  const deleteHighlightMutation = useMutation(api.highlights.deleteHighlights);
 
-  // useEffect(() => {
-  //   async function openDB() {
-  //     return new Promise<IDBDatabase>((resolve, reject) => {
-  //       const request = indexedDB.open("highlightsDB", 1);
+  const paginatedData = data ? data
+  .filter(item =>
+    item.website.toLowerCase().includes(search.toLowerCase()) ||
+    item.description.toLowerCase().includes(search.toLowerCase())
+  )
+  .sort((a, b) => {
+    const dateA = new Date(a.timestamp).getTime();
+    const dateB = new Date(b.timestamp).getTime();
+    return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
+  }).slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage):[]
 
-  //       request.onerror = (event) => {
-  //         console.error("Database error:", event.target.errorCode);
-  //         reject(event.target.errorCode);
-  //       };
-
-  //       request.onsuccess = (event) => {
-  //         console.log("Database opened successfully");
-  //         resolve(event.target.result);
-  //       };
-
-  //       request.onupgradeneeded = (event) => {
-  //         const db = event.target.result;
-  //         if (!db.objectStoreNames.contains("highlights")) {
-  //           db.createObjectStore("highlights", { keyPath: "id" });
-  //         }
-  //       };
-  //     });
-  //   }
-
-  //   async function getAllHighlights(db: IDBDatabase) {
-  //     return new Promise<DataItem[]>((resolve, reject) => {
-  //       const transaction = db.transaction(["highlights"], "readonly");
-  //       const store = transaction.objectStore("highlights");
-  //       const getAllRequest = store.getAll();
-
-  //       getAllRequest.onsuccess = (event) => {
-  //         resolve(event.target.result);
-  //       };
-
-  //       getAllRequest.onerror = (event) => {
-  //         console.error("Error retrieving entries:", event.target.errorCode);
-  //         reject(event.target.errorCode);
-  //       };
-  //     });
-  //   }
-
-  //   async function fetchHighlights() {
-  //     try {
-  //       const db = await openDB();
-  //       const entries = await getAllHighlights(db);
-  //       setData(entries);
-  //     } catch (error) {
-  //       console.error("Failed to fetch highlights:", error);
-  //     }
-  //   }
-
-  //   fetchHighlights();
-  // }, []);
-
-  // const filteredAndSortedData = useMemo(() => {
-  //   console.log(data)
-  //   return data
-  //     .filter(item =>
-  //       // item.title.toLowerCase().includes(search.toLowerCase()) ||
-  //       item.website.toLowerCase().includes(search.toLowerCase()) ||
-  //       item.description.toLowerCase().includes(search.toLowerCase())
-  //     )
-  //     .sort((a, b) => {
-  //       const dateA = new Date(a.timestamp).getTime()
-  //       const dateB = new Date(b.timestamp).getTime()
-  //       return sortOrder === 'asc' ? dateA - dateB : dateB - dateA
-  //     })
-  // }, [data, search, sortOrder])
-
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value)
+  }
+  const formatCreationTime = (timestamp) => {
+    const creationDate = new Date(timestamp);
+    const now = new Date();
+    const diffInDays = Math.floor((now - creationDate) / (1000 * 60 * 60 * 24));
+
+    if (diffInDays < 7) {
+      return formatDistanceToNow(creationDate, { addSuffix: true });
+    } else {
+      return format(creationDate, 'dd MMM yyyy');
+    }
+  };
+  const selectAll = () => {
+    if(isSelectAll){
+      setSelectedItems([])
+      setSelectedItems(data ? data.map(item => item._id as Id<"highlights">) : [])
+      }
+    else{
+      setSelectedItems(data?data.map(item => item._id):[])
+    }
+    setIsSelectAll(!isSelectAll)
   }
 
   const handleSort = (value: string) => {
@@ -126,103 +100,124 @@ export default function DataTable() {
     )
   }
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     // Delete selected items from IndexedDB
-    const deleteFromDB = async (ids: string[]) => {
-      const db = await openDB();
-      const transaction = db.transaction(["highlights"], "readwrite");
-      const store = transaction.objectStore("highlights");
-      
-      ids.forEach(id => {
-        store.delete(id);
-      });
-
-      transaction.oncomplete = () => {
-        console.log("All selected items deleted successfully!");
-        setData(prev => prev.filter(item => !ids.includes(item.id)));
-        setSelectedItems([]);
-        setIsDeleteDialogOpen(false);
-      };
-    };
-
-    deleteFromDB(selectedItems);
+    const deleted = await deleteHighlightMutation({ids: selectedItems})
+    setSelectedItems([])
+    setIsDeleteDialogOpen(false)
   }
 
   const truncateDescription = (description: string) => {
     const words = description.split(' ')
-    if (words.length > 50) {
-      return words.slice(0, 50).join(' ') + '...'
+    if (words.length > 10) {
+      return words.slice(0, 10).join(' ') + '...'
     }
     return description
   }
 
   return (
     <div className="container mx-auto p-4">
-      {JSON.stringify(data)}
-      <div className="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
-        <div className="relative w-full md:w-1/3">
-          <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
+      <div className="flex flex-col md:flex-row justify-between items-center mb-4 gap-4 ">
+        <div className="bg-white relative w-full md:w-1/3 ">
+          <Search className="absolute left-2 top-1/2 transform  -translate-y-1/2 text-gray-400" />
           <Input
             type="text"
             placeholder="Search by title, website, or description"
             value={search}
             onChange={handleSearch}
-            className="pl-10"
+            className="pl-10 bg-white"
           />
         </div>
-        <Select onValueChange={handleSort}>
-          <SelectTrigger className="w-full md:w-[180px]">
-            <SelectValue placeholder="Sort by date" />
+        <Select  onValueChange={handleSort}>
+          <SelectTrigger className="w-full md:w-[180px] bg-white">
+            <SelectValue  placeholder="Sort by date" />
           </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="desc">Newest first</SelectItem>
-            <SelectItem value="asc">Oldest first</SelectItem>
+          <SelectContent  className="bg-white">
+            <SelectItem className="text-black" value="desc">Newest first</SelectItem>
+            <SelectItem className="text-black"  value="asc">Oldest first</SelectItem>
           </SelectContent>
         </Select>
+        {
+          selectedItems.length > 0 && (
+            <Button 
+            onClick={selectAll}
+            className="flex items-center space-x-2 border">
+              {!isSelectAll? <Square className='text-black h-4'/> : <SquareCheckBigIcon className='text-black h-4'/>}
+              <span> Select All</span>
+            </Button>
+          )
+        }
         <Button
           variant="destructive"
           onClick={() => setIsDeleteDialogOpen(true)}
           disabled={selectedItems.length === 0}
         >
-          Delete Selected
+               <div className="flex items-center space-x-2">
+
+              <Trash2 className="text-white" />
+              <span>Delete Selected</span>
+              {/* <span>{selectedItems.length} selected</span> */}
+            </div>
         </Button>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {data&&data.map(item => (
-          <Card key={item._id} className="flex flex-col">
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                {/* <CardTitle className="truncate">{item.title }</CardTitle> */}
-                <CardTitle className="truncate">{"titlee" }</CardTitle>
+      <>
+      <Table className="w-[90vw] divide-y divide-gray-200">
+        <thead>
+          <tr>
+            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/12">Select</th>
+            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-2/12">Title</th>
+            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-6/12">Description</th>
+            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-2/12">Creation Time</th>
+            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/12">Source</th>
+          </tr>
+        </thead>
+        <tbody className="bg-white divide-y divide-gray-200">
+          {paginatedData.map(item => (
+            <tr key={item._id}>
+              <td className="px-6 py-4 whitespace-nowrap">
                 <Checkbox
+                className='border border-3xl shadow'
                   checked={selectedItems.includes(item._id)}
                   onCheckedChange={() => handleSelect(item._id)}
                 />
-              </div>
-            </CardHeader>
-            <CardContent className="flex-grow">
-              <p className="text-sm text-gray-500 mb-2">
-                {new Date(item._creationTime).toLocaleString()}
-              </p>
-              <p className="text-sm mb-2">{truncateDescription(item.description)}</p>
-            </CardContent>
-            <CardFooter>
-              <a
-                href={item.website}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-500 hover:underline truncate w-full"
-              >
-                {item.website}
-              </a>
-            </CardFooter>
-          </Card>
-        ))}
-      </div>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <div className="text-sm text-gray-900 truncate">{"titlee"}</div>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <div className="text-sm text-gray-900">{truncateDescription(item.description)}</div>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <div className="text-sm text-gray-500">{formatCreationTime(item._creationTime)}</div>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <a href={item.website} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline truncate w-full">
+                  <SquareArrowOutUpRight />
+                </a>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={Math.ceil( data?data
+    .filter(item =>
+      item.website.toLowerCase().includes(search.toLowerCase()) ||
+      item.description.toLowerCase().includes(search.toLowerCase())
+    )
+    .sort((a, b) => {
+      const dateA = new Date(a.timestamp).getTime();
+      const dateB = new Date(b.timestamp).getTime();
+      return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
+    }).length / itemsPerPage : 0)}
+        onPageChange={handlePageChange}
+      />
+    </>
 
-      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <DialogContent>
+      <Dialog open={isDeleteDialogOpen}  onOpenChange={setIsDeleteDialogOpen}>
+        <DialogContent className='bg-white'>
           <DialogHeader>
             <DialogTitle>Confirm Deletion</DialogTitle>
             <DialogDescription>
@@ -230,7 +225,7 @@ export default function DataTable() {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsDeleteDialogOpen(false)}>Cancel</Button>
+            <Button className='border border-lg' onClick={() => setIsDeleteDialogOpen(false)}>Cancel</Button>
             <Button variant="destructive" onClick={handleDelete}>Delete</Button>
           </DialogFooter>
         </DialogContent>
@@ -238,3 +233,26 @@ export default function DataTable() {
     </div>
   )
 }
+
+
+const Pagination = ({ currentPage, totalPages, onPageChange }) => {
+  const pages = [];
+
+  for (let i = 1; i <= totalPages; i++) {
+    pages.push(i);
+  }
+
+  return (
+    <div className="flex justify-center mt-4">
+      {pages.map(page => (
+        <button
+          key={page}
+          onClick={() => onPageChange(page)}
+          className={`px-4 py-2 mx-1 border ${page === currentPage ? 'bg-blue-500 text-white' : 'bg-white text-blue-500'}`}
+        >
+          {page}
+        </button>
+      ))}
+    </div>
+  );
+};

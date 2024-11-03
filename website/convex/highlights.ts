@@ -28,3 +28,15 @@ export const getHighlights = query({
     return await ctx.db.query('highlights').collect();
   },
 });
+
+// Mutation to delete a highlight based on _id
+export const deleteHighlights = mutation({
+  args: { ids: v.array(v.id("highlights")) },
+  handler: async (ctx, args) => {
+    for (const id of args.ids) {
+      await ctx.db.delete(id);
+    }
+  },
+});
+
+
