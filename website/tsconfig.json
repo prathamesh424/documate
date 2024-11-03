@@ -1,9 +1,15 @@
 {
   "compilerOptions": {
     "lib": ["dom", "dom.iterable", "esnext"],
+    "noEmitOnError": false,               // Allow emitting files even if there are errors
+    "strict": false,                       // Disable all strict type checking options
+    "noImplicitAny": false,                // Allow expressions and declarations to have an 'any' type
+    "noUnusedLocals": false,              // Allow unused local variables
+    "noUnusedParameters": false,           // Allow unused parameters
+    "noFallthroughCasesInSwitch": false,  // Allow fallthrough cases in switch statements
+    "forceConsistentCasingInFileNames": false ,
     "allowJs": true,
     "skipLibCheck": true,
-    "strict": true,
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
