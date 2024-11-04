@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "DocuMate",
   "version": "1.0",
-  "description": "Capture highlighted text along with timestamp and URL.",
+  "description": "Compile everything you read online.",
   "permissions": ["storage", "activeTab", "scripting"],
   "background": {
     "service_worker": "background.js"

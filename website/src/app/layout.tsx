@@ -11,8 +11,8 @@ import { Toaster } from "@/components/ui_copy/toaster";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Informal",
-  description: "Make forms with Convex and Love",
+  title: "Documate",
+  description: "Compile everything you read online.",
 };
 
 export default function RootLayout({
@@ -23,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <Head>
-      <link rel="shortcut icon" href="/favicon.ico" />
+      <link  href="/favicon.ico" />
     </Head>
       <body className={inter.className}>
         <div className="flex flex-col h-screen w-screen bg-black m-0 p-0">

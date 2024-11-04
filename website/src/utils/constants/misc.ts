@@ -8,47 +8,51 @@ export const PAGINATION_LIMIT = 10;
 export const COMPANIES = [
 	{
 		name: "Asana",
-		logo: "/assets/company-01.svg",
+		logo: "/assets/techstack_1.png",
 	},
 	{
 		name: "Tidal",
-		logo: "/assets/company-02.svg",
+		logo: "/assets/techstack_1.png",
 	},
 	{
 		name: "Innovaccer",
-		logo: "/assets/company-03.svg",
+		logo: "/assets/techstack_1.png",
+
 	},
 	{
 		name: "Linear",
-		logo: "/assets/company-04.svg",
+		logo: "/assets/techstack_1.png",
+
 	},
 	{
 		name: "Raycast",
-		logo: "/assets/company-05.svg",
+		logo: "/assets/techstack_1.png",
+
 	},
 	{
 		name: "Labelbox",
-		logo: "/assets/company-06.svg",
+		logo: "/assets/techstack_1.png",
+
 	},
 ] as const;
 
 export const PROCESS = [
 	{
-		title: "Upload Your Video",
+		title: "Download the Chrome Extension",
 		description:
-			"Easily categorize the scripts and optimize the media to create high-quality blog posts.",
+			"Install and activate the Chrome extension.",
 		icon: FolderOpenIcon,
 	},
 	{
 		title: "AI Magic",
 		description:
-			"Create SEO-optimized blog posts that are easy to customize and share.",
+			"Just with a simple highlight Ai will use its magic to organize all the highlighted content across websites.",
 		icon: WandSparklesIcon,
 	},
 	{
-		title: "Optimize and Export",
+		title: "Create pages from knowledge",
 		description:
-			"Content is provided in Markdown format and can be easily exported.",
+			"volla! You can generate any page from the knowledge base and export the content in markdown format.",
 		icon: ScrollText,
 	},
 ] as const;

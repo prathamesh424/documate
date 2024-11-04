@@ -72,8 +72,11 @@ export default function Home() {
               <div className="z-50 flex items-center justify-center gap-4 whitespace-nowrap">
           		<SignInButton>
 				<Button >
-                    Start creating for free
-                    <ArrowRightIcon className="ml-2 h-4 w-4" />
+				<span className="z-10 flex items-center justify-center gap-1 py-0.5 text-black text-sm font-bold">
+
+				  Get started now
+                  <ArrowRightIcon className="ml-1 size-3 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5" />
+                </span>
                 </Button>
 				</SignInButton>
 
@@ -109,7 +112,7 @@ export default function Home() {
 					<div className="py-14">
 						<div className="mx-auto px-4 md:px-8">
 							<h2 className="text-center font-heading font-medium text-neutral-400 text-sm uppercase">
-								Trusted by the best in the industry
+								Techstacks used for Documate
 							</h2>
 							<div className="mt-8">
 								<ul className="flex flex-wrap items-center justify-center gap-x-6 gap-y-6 md:gap-x-16">
@@ -132,42 +135,16 @@ export default function Home() {
 				</AnimationContainer>
 			</MaxWidthWrapper>
 
-			{/* Features Section */}
-			<MaxWidthWrapper className="pt-10">
-				<AnimationContainer delay={0.1}>
-					<div
-						id="features"
-						className="flex w-full flex-col items-center justify-center py-8 lg:items-center"
-					>
-						<MagicBadge title="Features" />
-						<h2 className="!leading-[1.1] mt-6 text-center font-heading font-medium text-3xl text-foreground md:text-5xl lg:text-center">
-							Manage Blogs Like a Pro
-						</h2>
-						<p className="mt-4 max-w-lg text-center text-lg text-muted-foreground lg:text-center">
-							Writora AI is a cutting-edge blog generation tool that delivers
-							content-driven blogs in just seconds.
-						</p>
-					</div>
-				</AnimationContainer>
-				<AnimationContainer delay={0.2}>
-					<BentoGrid className="py-8">
-						{CARDS.map((feature, idx) => (
-							<BentoCard key={idx} {...feature} />
-						))}
-					</BentoGrid>
-				</AnimationContainer>
-			</MaxWidthWrapper>
-
-			{/* Process Section */}
-			<MaxWidthWrapper className="py-10">
+	{/* Process Section */}
+	<MaxWidthWrapper className="py-10">
 				<AnimationContainer delay={0.1}>
 					<div className="mx-auto flex w-full max-w-xl flex-col items-center justify-center py-8 lg:items-center">
-						<MagicBadge title="The Process" />
+						<MagicBadge title="Simple Steps" />
 						<h2 className="!leading-[1.1] mt-6 text-center font-heading font-medium text-3xl text-foreground md:text-5xl lg:text-center">
 							Generate content effortlessly in just 3 steps
 						</h2>
 						<p className="mt-4 max-w-lg text-center text-lg text-muted-foreground lg:text-center">
-							Easily repurpose your content into SEO focused blog posts
+							Easily activate the Chrome extension and effortlessly create content from the content you visited!
 						</p>
 					</div>
 				</AnimationContainer>
@@ -198,8 +175,27 @@ export default function Home() {
 				</div>
 			</MaxWidthWrapper>
 
+			{/* Features Section */}
+			<MaxWidthWrapper className="pt-10">
+				<AnimationContainer delay={0.1}>
+					<div
+						id="features"
+						className="flex w-full flex-col items-center justify-center py-8 lg:items-center"
+					>
+						<MagicBadge title="Usage" />
+						<h2 className="!leading-[1.1] mt-6 text-center font-heading font-medium text-3xl text-foreground md:text-5xl lg:text-center">
+							Create Docs Like a Pro
+						</h2>
+						<p className="mt-4 max-w-lg text-center text-lg text-muted-foreground lg:text-center">
+						Activate the Chrome extension, highlight content on any website, and your document will be automatically created from the highlighted text.						</p>
+					</div>
+				</AnimationContainer>
+			</MaxWidthWrapper>
+
+		
+
 			{/* Pricing Section */}
-			<MaxWidthWrapper className="py-10">
+			{/* <MaxWidthWrapper className="py-10">
 				<AnimationContainer delay={0.1}>
 					<div
 						id="pricing"
@@ -228,10 +224,10 @@ export default function Home() {
 						</div>
 					</div>
 				</AnimationContainer>
-			</MaxWidthWrapper>
+			</MaxWidthWrapper> */}
 
 			{/* Reviews Section */}
-			<MaxWidthWrapper className="py-10">
+			{/* <MaxWidthWrapper className="py-10">
 				<AnimationContainer delay={0.1}>
 					<div
 						id="testimonials"
@@ -329,7 +325,7 @@ export default function Home() {
 						))}
 					</div>
 				</div>
-			</MaxWidthWrapper>
+			</MaxWidthWrapper> */}
 
 			{/* CTA Section */}
 			<MaxWidthWrapper className="scrollbar-hide mt-20 max-w-[100vw] overflow-x-hidden">
@@ -337,13 +333,11 @@ export default function Home() {
 					<LampContainer>
 						<div className="relative flex w-full flex-col items-center justify-center text-center">
 							<h2 className="!leading-[1.15] mt-8 bg-gradient-to-b from-neutral-200 to-neutral-400 bg-clip-text py-4 text-center font-heading font-medium text-4xl text-transparent tracking-tight md:text-7xl">
-								Step into the Future of AI <br />
-								Content Creation
+							Harness AI for  <br />
+							Instant Document Creation
 							</h2>
 							<p className="mx-auto mt-6 max-w-md text-muted-foreground">
-								Unlock the future of content creation with our cutting-edge,
-								AI-powered platform. Let AI do the heavy lifting, so you can
-								focus on what matters most—your ideas.
+								Checkout the amazing Aria Model that helps you create documents in seconds.
 							</p>
 							<div className="mt-6">
 								<Button>

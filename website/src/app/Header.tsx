@@ -6,7 +6,7 @@ import { useState } from "react";
 
 export default function Header() {
   const rainbowColors = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet'];
-  const word = 'Informal';
+  const word = 'Documate';
   const rainbowWord = word.split('').map((letter, i) => (
     <span key={i} style={{ color: rainbowColors[i % rainbowColors.length] }}>{letter}</span>
   ));
