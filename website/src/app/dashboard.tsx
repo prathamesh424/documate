@@ -13,7 +13,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Checkbox } from "@/components/ui/checkbox"
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from "@/components/ui/context-menu"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
-import { ChevronRight, Lock, Unlock, Search, Heart, GripVertical, Settings, Layers, History, Database,Notebook, Pencil, ExternalLink, Trash2, ChevronDown,Home } from 'lucide-react'
+import { ChevronRight, Lock, Unlock, Search, Heart, GripVertical, Settings, Layers, History, Database,Notebook, Pencil, ExternalLink, Trash2, ChevronDown,Home, ArrowRightIcon, Copy } from 'lucide-react'
 import { UserButton, useUser } from '@clerk/clerk-react'
 import Memory from './storage/page'
 import SettingsPage from '@/components/settings/settings_page'
@@ -217,7 +217,14 @@ export default function Dashboard() {
   )
 // State to keep track of the currently selected page
 const [currentPage, setCurrentPage] = useState('home');
+const [showPopup, setShowPopup] = useState(false);
 
+const handleClick = () => {
+  setShowPopup(true);
+  setTimeout(() => {
+    setShowPopup(false);
+  }, 2000); // Hide the popup after 2 seconds
+};
 const handlePageChange = (page:string) => {
   setCurrentPage(page);
   // Add any additional logic you want to perform on page change here
@@ -337,7 +344,30 @@ const handlePageChange = (page:string) => {
                     <span>{selectedArticle.date}</span>
                   </div>
                 </div>
-                <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+                <div>
+                <Button
+         className="w-[180px] h-12 bg-white pl-4 pr-4 rounded-full border border-gray-200 focus:outline-none focus:border-gray-300 focus:ring-2 focus:ring-gray-200 shadow-sm "
+         >
+         <Copy className="h-5 w-5 mr-4 text-gray-400"/>
+         Copy Markdown
+                </Button>
+                {/* <div className="flex items-center space-x-2">
+                  <Button variant="ghost" size="icon" onClick={handleClick}>
+                    <Pencil className="h-6 w-6" />
+                  </Button>
+                  <Button variant="ghost" size="icon" onClick={handleClick}>
+                    <History className="h-6 w-6" />
+                  </Button>
+                </div> */}
+                {showPopup && (
+                  <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="bg-white p-4 rounded shadow-lg">
+                      😅 Feature coming soon
+                    </div>
+                  </div>
+                )}
+              </div>
+                {/* <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
                   <SheetTrigger asChild>
                     <Button variant="primary" size="icon" ref={sheetTriggerRef}>
                       <Database className="h-4 w-4" />
@@ -414,7 +444,7 @@ const handlePageChange = (page:string) => {
                       </div>
                     )}
                   </SheetContent>
-                </Sheet>
+                </Sheet> */}
               </header>
               <main className="flex-1 overflow-auto p-6">
                 {/* {JSON.stringify(selectedArticle)} */}

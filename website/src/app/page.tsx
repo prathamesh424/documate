@@ -21,7 +21,7 @@ import MagicCard from "@/components/ui/magic-card";
 import { COMPANIES, PROCESS } from "@/utils";
 import { BentoCard, BentoGrid, CARDS } from "@/components/ui/bento-grid";
 import PricingCards from "@/components/pricing-cards";
-
+import React, { useState, useEffect } from 'react';
 import { REVIEWS } from "@/utils/constants/misc";
 
 import { ArrowRightIcon, CreditCardIcon, StarIcon } from "lucide-react";
@@ -30,7 +30,17 @@ import Link from "next/link";
 import Dashboard from "./dashboard";
 import Header from "./Header";
 export default function Home() {
-  
+	const [imageSrc, setImageSrc] = useState('/assets/dashboard.jpg');
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setImageSrc((prevSrc) =>
+        prevSrc === '/assets/dashboard.jpg' ? '/assets/dashboard1.jpg' : '/assets/dashboard.jpg'
+      );
+    }, 1000); // Change image every second
+
+    return () => clearInterval(interval); // Clean up the interval on component unmount
+  }, []);
   return ( <div className="bg-white mx-0 p-0">
       
     <Unauthenticated>
@@ -94,13 +104,13 @@ export default function Home() {
               <div className="-m-2 lg:-m-4 rounded-xl bg-opacity-50 p-2 ring-1 ring-foreground/20 ring-inset backdrop-blur-3xl lg:rounded-2xl">
                 <BorderBeam size={250} duration={12} delay={9} />
                 <Image
-                  src="/assets/dashboard-dark.png"
-                  alt="Dashboard"
-                  width={1500}
-                  height={1500}
-                  quality={100}
-                  className="rounded-md bg-foreground/10 ring-1 ring-border lg:rounded-xl"
-                />
+				src={imageSrc}
+				alt="Dashboard"
+				width={1500}
+				height={1500}
+				quality={100}
+				className="rounded-md bg-foreground/10 ring-1 ring-border lg:rounded-xl"
+				/>
                 <div className="-bottom-4 absolute inset-x-0 z-40 h-1/2 w-full bg-gradient-to-t from-background" />
                 <div className="md:-bottom-8 absolute inset-x-0 bottom-0 z-50 h-1/4 w-full bg-gradient-to-t from-background" />
               </div>

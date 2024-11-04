@@ -38,7 +38,7 @@ export default function Component() {
             <CardTitle>Step 3: Enable Developer Mode</CardTitle>
           </CardHeader>
           <CardContent>
-            <p>On the extensions page, click to enable "Developer mode" in the top right corner.</p>
+            <p>On the extensions page, click to enable Developer mode in the top right corner.</p>
             <Image
               src="/assets/developer_mode.gif"
               alt="Extension configuration"
@@ -54,7 +54,7 @@ export default function Component() {
             <CardTitle>Step 4: Load the Extension</CardTitle>
           </CardHeader>
           <CardContent>
-            <p>Click on "Load unpacked" and select the folder you extracted from the ZIP file.</p>
+            <p>Click on Load unpacked and select the folder you extracted from the ZIP file.</p>
             <Image
               src="/assets/load_unpacked.jpg"
               alt="Extension configuration"
