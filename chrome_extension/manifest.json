@@ -1,20 +1,24 @@
 {
-    "manifest_version": 3,
-    "name": "DocuMate",
-    "version": "1.0",
-    "description": "Capture highlighted text along with timestamp and URL.",
-    "permissions": ["storage", "activeTab", "scripting"],
-    "background": {
-      "service_worker": "background.js"
-    },
-    "content_scripts": [
-      {
-        "matches": ["<all_urls>"],
-        "js": ["content.js"]
-      }
-    ],
-    "action": {
-      "default_popup": "popup.html"
+  "manifest_version": 3,
+  "name": "DocuMate",
+  "version": "1.0",
+  "description": "Capture highlighted text along with timestamp and URL.",
+  "permissions": ["storage", "activeTab", "scripting"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
     }
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "icons": {
+    "16": "logo_white.png",
+    "48": "logo_white.png",
+    "128": "logo_white.png"
   }
-  
+}
