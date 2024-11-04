@@ -1,7 +1,7 @@
 import { useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Search, SendHorizontalIcon, Settings, StarsIcon } from 'lucide-react'
+import { ArrowRightIcon, Search, SendHorizontalIcon, Settings, StarsIcon } from 'lucide-react'
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 import { Label } from '@radix-ui/react-context-menu'
 import { Calendar } from '../ui/calendar'
@@ -299,6 +299,12 @@ interface CreatePageProps {
          <pre>{JSON.stringify(extractTitles(result.choices[0].message.content))}</pre>
        </div>
      )} */}
+     <Button
+     onClick={()=>router.push('/guide')}
+         className="absolute top-10 right-10 w-[180px] h-12 bg-white pl-4 pr-4 rounded-full border border-gray-200 focus:outline-none focus:border-gray-300 focus:ring-2 focus:ring-gray-200 shadow-sm "
+         >Download Extension 
+         <ArrowRightIcon className="h-5 w-5 text-gray-400"/>
+         </Button>
      <h1 className="text-[60px] font-normal mb-8 text-center">
        <span className="text-black">Provide a page title</span>
      </h1>
