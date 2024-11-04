@@ -35,6 +35,7 @@ export default defineSchema({
       author: v.string(), // Article author
       date: v.string(), // Article date in ISO format
       content: v.array(v.any()), // List of content blocks
+      markdown: v.optional(v.string()), // Optional markdown content
     }),
     
     // Define the structure of content blocks

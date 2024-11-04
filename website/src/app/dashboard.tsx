@@ -21,6 +21,7 @@ import { useQuery } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 import { se } from 'date-fns/locale'
 import CreatePage from '@/components/home/create-page'
+import MarkdownRenderer from '@/components/blog/markdown-renderer'
 const inputData = [
   { id: "text1", type: "text", content: "React is a popular JavaScript library for building user interfaces. It allows developers to create reusable UI components that can be composed to build complex applications.", description: "Introduction to React", url: "https://reactjs.org" },
   { id: "text2", type: "text", content: "Key Concepts", description: "React key concepts heading", url: "https://reactjs.org/docs/getting-started.html" },
@@ -42,7 +43,7 @@ export default function Dashboard() {
   const instance = useUser()
   const user_email = instance.user && instance.user.emailAddresses && instance.user.emailAddresses[0].emailAddress
   const pagesData = useQuery(api.pages.getPages, {author: user_email||""  });
-  const sidebarData = pagesData ? pagesData.map((item)=>{ return {id:item._id , title: item.title , date : item.date , locked :  false}}) : []
+  const sidebarData = pagesData ? pagesData.map((item)=>{ return {id:item._id , title: item.title , date : item.date , locked :  false , markdown:item.markdown||""}}) : []
   const cardRefs = useRef<{ [key: string]: HTMLDivElement | null }>({})
 
   const onDragEnd = (result) => {
@@ -416,51 +417,8 @@ const handlePageChange = (page:string) => {
                 </Sheet>
               </header>
               <main className="flex-1 overflow-auto p-6">
-                <article className="mx-auto max-w-3xl">
-                  <DragDropContext onDragEnd={onDragEnd}>
-                    <Droppable droppableId="article-content">
-                      {(provided) => (
-                        <div {...provided.droppableProps} ref={provided.innerRef}>
-                          {/* {JSON.stringify(selectedArticle)} */}
-                         
-                          {pagesData?.find((item) => item._id === selectedArticle?.id)?.content.map((item, index) => (
-                            <Draggable key={item} draggableId={item} index={index}>
-                              {(provided, snapshot) => (
-                                <ContextMenu>
-                                  <ContextMenuTrigger>
-                                    <div
-                                      ref={provided.innerRef}
-                                      {...provided.draggableProps}
-                                      className={`group relative mb-4 ${snapshot.isDragging ? 'bg-muted/50' : ''}`}
-                                    >
-                                      <div
-                                        {...provided.dragHandleProps}
-                                        className="absolute left-0 top-0 h-full w-6 cursor-move opacity-0 transition-opacity group-hover:opacity-100"
-                                      >
-                                        <div className="flex h-full items-center justify-center">
-                                          <GripVertical className="h-5 w-5 text-muted-foreground" />
-                                        </div>
-                                      </div>
-                                      <div className="pl-8">
-                                        {renderContent(item)}
-                                      </div>
-                                    </div>
-                                  </ContextMenuTrigger>
-                                  <ContextMenuContent>
-                                    <ContextMenuItem onSelect={() => handleViewOriginData(item.originDataId)}>
-                                      View Origin Data
-                                    </ContextMenuItem>
-                                  </ContextMenuContent>
-                                </ContextMenu>
-                              )}
-                            </Draggable>
-                          ))}
-                          {provided.placeholder}
-                        </div>
-                      )}
-                    </Droppable>
-                  </DragDropContext>
-                </article>
+                {/* {JSON.stringify(selectedArticle)} */}
+                    <MarkdownRenderer markdown={selectedArticle.markdown} />
               </main>
               <footer className="border-t p-4 text-center text-sm text-muted-foreground">
                 Built with <Heart className="inline-block h-4 w-4 text-red-500" />

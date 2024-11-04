@@ -39,6 +39,7 @@ export const addArticle = mutation({
       title: v.string(), // Validate title as a string
       author: v.string(), // Validate author as a string
       date: v.string(), // Validate date as a string
+      markdown: v.optional(v.string()), // Optional markdown content
       content: v.array(v.object({ // Validate content as an array of objects
         id: v.string(), // Each block should have a string ID
         originDataId: v.string(), // Each block should reference the highlight ID
@@ -86,6 +87,7 @@ export const addArticle = mutation({
         author: args.author,
         date: args.date,
         content: contentBlockIds, // Use the IDs of the inserted content blocks
+        markdown: args.markdown || "", // Initialize the markdown field
       });
   
       return articleId; // Return the article ID

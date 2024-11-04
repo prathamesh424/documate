@@ -234,6 +234,7 @@ interface CreatePageProps {
         author: user_email||"",
         date: new Date().toISOString(),
         content: markdownData,
+        markdown: data.choices[0].message.content,
       })
         
       handlerArticleGenerationCompleted()
