@@ -229,6 +229,15 @@ const handlePageChange = (page:string) => {
   setCurrentPage(page);
   // Add any additional logic you want to perform on page change here
 };
+const copyText = () => {
+  navigator.clipboard.writeText(selectedArticle.markdown||"")
+    .then(() => {
+      alert('Text copied to clipboard');
+    })
+    .catch(err => {
+      console.error('Failed to copy text: ', err);
+    });
+};
   return (
     <TooltipProvider>
       <div className="flex h-screen  bg-white p-0 m-0 w-[100vw]">
@@ -346,6 +355,7 @@ const handlePageChange = (page:string) => {
                 </div>
                 <div>
                 <Button
+                 onClick={copyText}
          className="w-[180px] h-12 bg-white pl-4 pr-4 rounded-full border border-gray-200 focus:outline-none focus:border-gray-300 focus:ring-2 focus:ring-gray-200 shadow-sm "
          >
          <Copy className="h-5 w-5 mr-4 text-gray-400"/>
