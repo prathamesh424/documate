@@ -317,11 +317,10 @@ const handlePageChange = (page:string) => {
           <ResizablePanel defaultSize={20} minSize={15}>
             <div className="flex h-full flex-col">
               <div className="border-b p-4">
-                <Input type="search" placeholder="Search articles..." className="w-full" />
+                <Input  type="search" placeholder="Search articles..." className="w-full bg-white" />
               </div>
               <ScrollArea className="flex-1">
                 {sidebarData&&sidebarData.map(renderSidebarItem)}
-                
               </ScrollArea>
             </div>
           </ResizablePanel>

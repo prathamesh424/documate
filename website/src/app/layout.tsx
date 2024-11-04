@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import ConvexClientProvider from "./ConvexClientProvider";
 import { ClerkProvider, useAuth } from "@clerk/clerk-react";
 import { ConvexProviderWithClerk } from "convex/react-clerk";
-
+import Head from 'next/head';
 import "./globals.css";
 import Header from "./Header";
 import { Toaster } from "@/components/ui_copy/toaster";
@@ -22,9 +22,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        <link rel="icon" href="https://zany.sh/favicon.svg?emoji=📋"></link>
-      </head>
+      <Head>
+      <link rel="shortcut icon" href="/favicon.ico" />
+    </Head>
       <body className={inter.className}>
         <div className="flex flex-col h-screen w-screen bg-black m-0 p-0">
         <ConvexClientProvider>
