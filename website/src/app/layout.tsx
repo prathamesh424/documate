@@ -23,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <Head>
-      <link  href="/favicon.ico" />
+      <link  href="favicon.ico" />
     </Head>
       <body className={inter.className}>
         <div className="flex flex-col h-screen w-screen bg-black m-0 p-0">
