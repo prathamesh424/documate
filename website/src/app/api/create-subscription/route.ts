@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { lemonSqueezyApiInstance } from "@/utils/axios";
+import axios from "axios";
+
 const LEMON_API_URL = "https://api.lemonsqueezy.com/v1";
 
 export const dynamic = "force-dynamic";
@@ -8,19 +9,25 @@ export async function POST(req: Request) {
   try {
     const reqData = await req.json();
 
-    if (!reqData.productId)
-      return Response.json(
-        { message: "productId is required" },
+    // Debugging: Check if productId and storeId are passed in the request
+    console.log("Received Request Data:", reqData);
+
+    // Validate productId and storeId
+    if (!reqData.productId || !process.env.LEMON_STORE_ID) {
+      return NextResponse.json(
+        { message: "productId and storeId are required" },
         { status: 400 }
       );
+    }
 
-    const response = await lemonSqueezyApiInstance.post("/checkouts", {
+    // Prepare payload
+    const payload = {
       data: {
         type: "checkouts",
         attributes: {
           checkout_data: {
             custom: {
-              user_id: "123",
+              user_id: "123", // Replace with dynamic user ID if needed
             },
           },
         },
@@ -28,21 +35,33 @@ export async function POST(req: Request) {
           store: {
             data: {
               type: "stores",
-              id: process.env.LEMON_STORE_ID.toString(),
+              id: process.env.LEMON_STORE_ID,
             },
           },
           variant: {
             data: {
               type: "variants",
-              id: reqData.productId.toString(),
+              id: "605843", // Dynamic product/variant ID
             },
           },
         },
       },
+    };
+
+    // Debugging: Log payload before sending
+    console.log("Payload sent to Lemon Squeezy:", JSON.stringify(payload, null, 2));
+
+    // Send POST request to Lemon Squeezy API
+    const response = await axios.post(`${LEMON_API_URL}/checkouts`, payload, {
+      headers: {
+        Authorization: `Bearer ${process.env.LEMON_API_KEY}`,
+        Accept: "application/vnd.api+json",
+        "Content-Type": "application/vnd.api+json",
+      },
     });
 
+    // Extract checkout URL from response
     const checkoutUrl = response.data.data.attributes.url;
-    console.log(response.data);
 
     return NextResponse.json({
       success: true,
@@ -50,9 +69,14 @@ export async function POST(req: Request) {
       checkoutUrl,
     });
   } catch (error: any) {
-    console.error("Error creating subscription:", error.message);
+    if (error.response) {
+      // Detailed error logging
+      console.error("Error response from API:", error.response.data);
+    } else {
+      console.error("Unexpected error:", error.message);
+    }
     return NextResponse.json(
-      { message: error.response?.data || error },
+      { message: error.response?.data?.message || "An unexpected error occurred" },
       { status: error.response?.status || 500 }
     );
   }
