@@ -6,7 +6,7 @@ import axios from "axios";
 export default function Subscribe() {
   const [email, setEmail] = useState("");
   const [products, setProducts] = useState([]);
-  const [selectedProduct, setSelectedProduct] = useState("");
+  const [selectedVariant, setSelectedVariant] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -21,14 +21,14 @@ export default function Subscribe() {
   };
 
   const handleSubscribe = async () => {
-    if (!selectedProduct) {
-      setMessage("Please enter an email and select a product.");
+    if (!selectedVariant) {
+      setMessage("Please select a variant.");
       return;
     }
     setLoading(true);
     try {
       const response = await axios.post("/api/create-subscription", {
-          productId: selectedProduct,
+        productId: selectedVariant, 
       });
       console.log(response.data);
       const { checkoutUrl } = response.data;
@@ -42,7 +42,6 @@ export default function Subscribe() {
       setLoading(false);
     }
   };
-  
 
   return (
     <div className="max-w-lg mx-auto mt-10">
@@ -54,15 +53,19 @@ export default function Subscribe() {
         Fetch Products
       </button>
       <select
-        value={selectedProduct}
-        onChange={(e) => setSelectedProduct(e.target.value)}
+        value={selectedVariant}
+        onChange={(e) => setSelectedVariant(e.target.value)}
         className="w-full mb-4 p-2 border"
       >
-        <option value="">Select a Product</option>
+        <option value="">Select a Product Variant</option>
         {products.map((product: any) => (
-          <option key={product.id} value={product.id}>
-            {product.attributes.name}
-          </option>
+          <optgroup key={product.id} label={product.attributes.name}>
+            {product.relationships.variants.data.map((variant: any) => (
+              <option key={variant.id} value={variant.id}>
+                {variant.id} 
+              </option>
+            ))}
+          </optgroup>
         ))}
       </select>
       <input
