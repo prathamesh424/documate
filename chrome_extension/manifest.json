@@ -1,24 +1,25 @@
 {
   "manifest_version": 3,
-  "name": "DocuMate",
+  "name": "Google Authentication Extension",
   "version": "1.0",
-  "description": "Compile everything you read online.",
-  "permissions": ["storage", "activeTab", "scripting"],
+  "permissions": [
+    "identity",
+    "identity.email"
+  ],
   "background": {
     "service_worker": "background.js"
-  },
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["content.js"]
-    }
-  ],
-  "action": {
-    "default_popup": "popup.html"
   },
   "icons": {
     "16": "logo_white.png",
     "48": "logo_white.png",
     "128": "logo_white.png"
-  }
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "logo_white.png"
+  },
+  "host_permissions": [
+    "https://accounts.google.com/*"
+  ]
 }
+
