@@ -1,6 +1,5 @@
 // Define the domain variable
-// const API_DOMAIN = 'https://documateit.vercel.app';
-const API_DOMAIN = 'http://localhost:3000';
+const API_DOMAIN = 'https://documateit.vercel.app';
 
 // Listen for mouseup events to detect when text is highlighted
 document.addEventListener("mouseup", async () => {
@@ -12,8 +11,7 @@ document.addEventListener("mouseup", async () => {
 
     // Fetch email ID from storage
     chrome.storage.sync.get(['email', 'isActive'], async (data) => {
-      console.log("data is ",data)
-      if (data&&!data.isActive) {
+      if (!data.isActive) {
         console.log("Extension is deactivated.");
         return; // Don't proceed if the extension is deactivated
       }

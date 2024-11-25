@@ -36,5 +36,8 @@ yarn-error.log*
 next-env.d.ts
 
 .env.local
+<<<<<<< HEAD
+=======
 .env
 .env.local
+>>>>>>> b462835d2d5f1937d3a8b2b4bf451dde1343d6c4
