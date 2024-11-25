@@ -52,4 +52,7 @@ export default defineSchema({
       caption: v.optional(v.string()), // Optional image caption
       originDataId: v.string(), // Reference to highlights table
     }),
+    privacy_policy  : defineTable({
+      
+    })
 });

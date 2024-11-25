@@ -16,7 +16,7 @@ export default function PrivacyPolicyPage() {
   const [activeSection, setActiveSection] = useState<string | null>(null);
 
   return (
-    <div className="min-h-screen bg-white text-black p-6 md:p-12">
+    <div className="min-h-screen bg-white text-black p-6 md:p-12 ">
       <div className="max-w-4xl mx-auto">
         <motion.h1 
           className="text-4xl md:text-6xl font-extrabold text-center mb-6 text-black"
