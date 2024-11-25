@@ -1,0 +1,33 @@
+{
+    "privacy_policy": {
+      "introduction": "Welcome to our Privacy Policy page. Your privacy and the security of your data are paramount to us. Here are the key points regarding how we handle and protect your information:",
+      "sections": {
+        "data_handling_and_security": {
+          "title": "Data Handling and Security",
+          "icon": "Shield",
+          "content": [
+            "Currently, the highlighted content is not encoded since it is sourced from open websites.",
+            "All documents created within our platform are encoded to ensure data security.",
+            "The history of each person is encoded and secured, safeguarding personal information and activity logs."
+          ]
+        },
+        "email_input_security": {
+          "title": "Email Input Security",
+          "icon": "Mail",
+          "content": [
+            "There is a known issue with the email input in our Chrome extension, which can potentially add data to a different account. This opens up the possibility of spamming.",
+            "We are actively working on securing the email input functionality to prevent such vulnerabilities and protect your data integrity."
+          ]
+        },
+        "commitment_to_security": {
+          "title": "Commitment to Security",
+          "icon": "Lock",
+          "content": [
+            "We are committed to continually enhancing our security measures to ensure your data remains safe and private. Thank you for your patience as we work towards a more secure experience."
+          ]
+        }
+      }
+    }
+  }
+  
+  
