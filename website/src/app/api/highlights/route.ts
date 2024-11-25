@@ -42,8 +42,8 @@ export async function POST(req: NextRequest) {
   cors(req, res);
   const client = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL || "");
   const { id, title, description, timestamp, website } = await req.json(); // Parse JSON body
-
   try {
+    console.log("description is ",description);
     const newHighlightId = await client.mutation(api.highlights.addHighlight, { id, title, description, timestamp, website });
     const newHighlight = { id, title, description, timestamp, website };
 
