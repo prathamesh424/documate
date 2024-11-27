@@ -1,0 +1,99 @@
+
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: none;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#main-body {
+    background-color: white;
+    width: 250px;
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+header {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+header button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50%;
+    transition: background-color 0.3s;
+}
+
+header button:hover {
+    background-color: #f0f0f0;
+}
+
+header button svg {
+    width: 20px;
+    height: 20px;
+    color: #5f6368;
+}
+
+#banner-section {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+#banner-section img {
+    width: 160px;
+    height: auto;
+    border-radius: 8px;
+}
+
+main {
+    text-align: center;
+}
+
+h1 {
+    color: #202124;
+    font-size: 20px;
+    margin-bottom: 8px;
+}
+
+p {
+    color: #5f6368;
+    font-size: 13px;
+    margin-bottom: 16px;
+}
+
+#sign-in-button {
+    background-color: #4285f4;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    transition: background-color 0.3s;
+}
+
+#sign-in-button:hover {
+    background-color: #3367d6;
+}
+
+#sign-in-button svg {
+    width: 20px;
+    height: 20px;
+}
