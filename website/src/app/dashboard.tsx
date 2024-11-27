@@ -13,7 +13,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Checkbox } from "@/components/ui/checkbox"
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from "@/components/ui/context-menu"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
-import { ChevronRight, Lock, Unlock, Search, Heart, GripVertical, Settings, Layers, History, Database,Notebook, Pencil, ExternalLink, Trash2, ChevronDown,Home, ArrowRightIcon, Copy , BookLock  } from 'lucide-react'
+import { ChevronRight, Lock, Unlock, Search, Heart, GripVertical,FileClock , Settings, Layers, History, Database,Notebook, Pencil, ExternalLink, Trash2, ChevronDown,Home, ArrowRightIcon, Copy , BookLock  } from 'lucide-react'
 import { UserButton, useUser } from '@clerk/clerk-react'
 import Memory from './storage/page'
 import SettingsPage from '@/components/settings/settings_page'
@@ -23,6 +23,7 @@ import { se } from 'date-fns/locale'
 import CreatePage from '@/components/home/create-page'
 import MarkdownRenderer from '@/components/blog/markdown-renderer'
 import PrivacyPolicyPage from './privacy_policy/page'
+import WebHistoryExplorer from './web_history/page'
 const inputData = [
   { id: "text1", type: "text", content: "React is a popular JavaScript library for building user interfaces. It allows developers to create reusable UI components that can be composed to build complex applications.", description: "Introduction to React", url: "https://reactjs.org" },
   { id: "text2", type: "text", content: "Key Concepts", description: "React key concepts heading", url: "https://reactjs.org/docs/getting-started.html" },
@@ -309,6 +310,22 @@ const copyText = () => {
           <p>Settings</p>
         </TooltipContent>
       </Tooltip>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon"
+            className={`h-10 w-10 ${currentPage === 'web_history' ? 'bg-gray-200' : ''}`}
+            onClick={() => handlePageChange('web_history')}
+          >
+            <FileClock className="h-5 w-5" />
+            <span className="sr-only">Web History</span>
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent side="right">
+          <p>Web History</p>
+        </TooltipContent>
+      </Tooltip>
 
       <Tooltip>
         <TooltipTrigger asChild>
@@ -497,6 +514,13 @@ const copyText = () => {
           {
             currentPage === 'settings' && (
               <SettingsPage/>
+            )
+          }
+          {
+            currentPage === 'web_history' && (
+              <div className="flex items-start ml-20 justify-start min-h-screen bg-white">
+              <WebHistoryExplorer/>
+              </div>
             )
           }
           {currentPage === 'privacy_policy' && (

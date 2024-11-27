@@ -52,7 +52,34 @@ export default defineSchema({
       caption: v.optional(v.string()), // Optional image caption
       originDataId: v.string(), // Reference to highlights table
     }),
-    privacy_policy  : defineTable({
-      
-    })
+
+    categories: defineTable({
+      id: v.number(),  
+      type: v.string(), 
+      name: v.string(), 
+      websiteCount: v.optional(v.number()), // Optional: Number of websites in this category
+      lastVisited: v.optional(v.string()), // Optional: Timestamp of last visit
+      parentId: v.optional(v.number()), // Optional: Reference to parent category ID
+      subCategories: v.optional(
+        v.array(
+          v.object({
+            id: v.number(), // Subcategory ID
+            type: v.string(), // Type of the subcategory
+            name: v.string(), // Name of the subcategory
+            websiteCount: v.optional(v.number()), // Optional: Number of websites
+            lastVisited: v.optional(v.string()), // Optional: Last visited timestamp
+          })
+        )
+      ), // Optional: Array of subcategory objects
+    }),
+    
+  
+
+    // Define the structure of broader categories
+    broaderCategories: defineTable({
+      id: v.string(), // Unique string identifier for broader categories
+      name: v.string(), // Name of the broader category
+      categories: v.array(v.number()), // Array of category IDs under this broader category
+    }),
+  
 });
