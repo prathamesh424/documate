@@ -4,7 +4,8 @@
   "version": "1.0",
   "permissions": [
     "identity",
-    "identity.email"
+    "identity.email",
+    "storage"
   ],
   "background": {
     "service_worker": "background.js"

@@ -5,12 +5,13 @@ chrome.runtime.onInstalled.addListener(() => {
 // Listen for the 'authenticate' message from the popup
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'authenticate') {
-    authenticateUser(); // Trigger authentication
+    authenticateUser(sendResponse); // Trigger authentication
+    return true; // Keep the response open for async processing
   }
 });
 
 // Function to handle OAuth flow
-function authenticateUser() {
+function authenticateUser(sendResponse) {
   const clientId = '632635626162-mib8unurg6jgs265ll2vtefd9nihkf20.apps.googleusercontent.com';
   const redirectUri = 'https://aoikajdfmhdnhpdmnphpljdlgpcodaml.chromiumapp.org/'; // Use your extension ID here
   const scope = 'profile email';
@@ -25,22 +26,24 @@ function authenticateUser() {
     (redirectUrl) => {
       if (chrome.runtime.lastError || !redirectUrl) {
         console.error('Authentication failed');
+        sendResponse({ success: false, error: chrome.runtime.lastError.message });
         return;
       }
 
       // Extract the token from the redirect URL
       const urlParams = new URLSearchParams(new URL(redirectUrl).hash.substring(1));
       const accessToken = urlParams.get('access_token');
+
       if (accessToken) {
-        // console.log('Access Token:', accessToken);
-        getUserProfile(accessToken);  // Fetch user profile data using the access token
+        console.log('Access Token:', accessToken);
+        getUserProfile(accessToken, sendResponse); // Fetch user profile data
       }
     }
   );
 }
 
 // Function to fetch user profile data using the access token
-function getUserProfile(accessToken) {
+function getUserProfile(accessToken, sendResponse) {
   fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
     method: 'GET',
     headers: {
@@ -49,10 +52,16 @@ function getUserProfile(accessToken) {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log('User Profile:', data);
-      // Here you can process and store user data as needed
+      // console.log('User Profile:', data);
+
+      // Save user data to chrome.storage.local
+      chrome.storage.local.set({ user: data }, () => {
+        // console.log('User data saved to storage:', data);
+        sendResponse({ success: true, user: data });
+      });
     })
     .catch((error) => {
       console.error('Error fetching user profile:', error);
+      sendResponse({ success: false, error: error.message });
     });
 }
