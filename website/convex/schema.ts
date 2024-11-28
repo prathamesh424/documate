@@ -72,14 +72,23 @@ export default defineSchema({
         )
       ), // Optional: Array of subcategory objects
     }),
-    
-  
-
     // Define the structure of broader categories
     broaderCategories: defineTable({
       id: v.string(), // Unique string identifier for broader categories
       name: v.string(), // Name of the broader category
       categories: v.array(v.number()), // Array of category IDs under this broader category
     }),
+
+    apiKeys: defineTable({
+      email: v.string(),
+      keys: v.array(
+        v.object({
+          provider: v.string(),
+          key: v.string(), 
+          isDefault: v.boolean(),
+          isEnabled: v.boolean(),
+        })
+      ),
+    }).index("by_email", ["email"]),
   
 });

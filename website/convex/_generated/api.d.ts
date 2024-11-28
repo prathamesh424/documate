@@ -14,6 +14,7 @@ import type {
   FilterApi,
   FunctionReference,
 } from "convex/server";
+import type * as apikey_manager from "../apikey_manager.js";
 import type * as forms from "../forms.js";
 import type * as form_fields from "../form_fields.js";
 import type * as form_responses from "../form_responses.js";
@@ -31,6 +32,7 @@ import type * as web_history from "../web_history.js";
  * ```
  */
 declare const fullApi: ApiFromModules<{
+  apikey_manager: typeof apikey_manager;
   forms: typeof forms;
   form_fields: typeof form_fields;
   form_responses: typeof form_responses;
