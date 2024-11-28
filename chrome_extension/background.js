@@ -12,7 +12,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 // Function to handle OAuth flow
 function authenticateUser() {
   const clientId = '632635626162-mib8unurg6jgs265ll2vtefd9nihkf20.apps.googleusercontent.com';
-  const redirectUri = 'https://aoikajdfmhdnhpdmnphpljdlgpcodaml.chromiumapp.org/'; // Use your extension ID here
+  const redirectUri = 'https://efhnjifehajdkdemacmhcpmhndbgaffn.chromiumapp.org/'; // Use your extension ID here
   const scope = 'profile email';
 
   const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?response_type=token&client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}`;
@@ -23,6 +23,7 @@ function authenticateUser() {
       interactive: true,
     },
     (redirectUrl) => {
+      console.log("redirectUrl", redirectUrl);
       if (chrome.runtime.lastError || !redirectUrl) {
         console.error('Authentication failed');
         return;
