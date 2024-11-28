@@ -13,7 +13,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Checkbox } from "@/components/ui/checkbox"
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from "@/components/ui/context-menu"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
-import { ChevronRight, Lock, Unlock, Search, Heart, GripVertical, Settings, Layers, History, Database,Notebook, Pencil, ExternalLink, Trash2, ChevronDown,Home, ArrowRightIcon, Copy } from 'lucide-react'
+import { ChevronRight, Lock, Unlock, Search, Heart, GripVertical,FileClock ,MessageSquareDiff , Settings, Layers, History, Database,Notebook, Pencil, ExternalLink, Trash2, ChevronDown,Home, ArrowRightIcon, Copy , BookLock  } from 'lucide-react'
 import { UserButton, useUser } from '@clerk/clerk-react'
 import Memory from './storage/page'
 import SettingsPage from '@/components/settings/settings_page'
@@ -22,6 +22,9 @@ import { api } from '../../convex/_generated/api'
 import { se } from 'date-fns/locale'
 import CreatePage from '@/components/home/create-page'
 import MarkdownRenderer from '@/components/blog/markdown-renderer'
+import PrivacyPolicyPage from './privacy_policy/page'
+import WebHistoryExplorer from './web_history/page'
+import ApiKeyManager from './apikey-manager/page'
 const inputData = [
   { id: "text1", type: "text", content: "React is a popular JavaScript library for building user interfaces. It allows developers to create reusable UI components that can be composed to build complex applications.", description: "Introduction to React", url: "https://reactjs.org" },
   { id: "text2", type: "text", content: "Key Concepts", description: "React key concepts heading", url: "https://reactjs.org/docs/getting-started.html" },
@@ -229,6 +232,7 @@ const handlePageChange = (page:string) => {
   setCurrentPage(page);
   // Add any additional logic you want to perform on page change here
 };
+
 const copyText = () => {
   navigator.clipboard.writeText(selectedArticle.markdown||"")
     .then(() => {
@@ -307,6 +311,59 @@ const copyText = () => {
           <p>Settings</p>
         </TooltipContent>
       </Tooltip>
+      
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon"
+            className={`h-10 w-10 ${currentPage === 'apikey-manager' ? 'bg-gray-200' : ''}`}
+            onClick={() => handlePageChange('apikey-manager')}
+          >
+            <MessageSquareDiff className="h-5 w-5" />
+            <span className="sr-only">Api Key Manager</span>
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent side="right">
+          <p>Api Key Manager</p>
+        </TooltipContent>
+      </Tooltip>
+
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon"
+            className={`h-10 w-10 ${currentPage === 'web_history' ? 'bg-gray-200' : ''}`}
+            onClick={() => handlePageChange('web_history')}
+          >
+            <FileClock className="h-5 w-5" />
+            <span className="sr-only">Web History</span>
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent side="right">
+          <p>Web History</p>
+        </TooltipContent>
+      </Tooltip>
+
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon"
+            className={`h-10 w-10 ${currentPage === 'privacy_policy' ? 'bg-gray-200' : ''}`}
+            onClick={() => handlePageChange('privacy_policy')}
+          >
+            <BookLock className="h-5 w-5" />
+            <span className="sr-only">Privacy Policy</span>
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent side="right">
+          <p>Privacy Policy</p>
+        </TooltipContent>
+      </Tooltip>
+
+
     </div>
           <div className='py-5'>
           <UserButton />
@@ -314,7 +371,7 @@ const copyText = () => {
 
         </div>
 
-        <div className='ml-20'>
+        <div className='ml-auto mr-auto'>
           {
             currentPage === 'home' && (
               <div>
@@ -478,6 +535,29 @@ const copyText = () => {
               <SettingsPage/>
             )
           }
+          {
+            currentPage === 'web_history' && (
+              <div className="flex items-start ml-20 justify-start min-h-screen bg-white">
+              <WebHistoryExplorer/>
+              </div>
+            )
+          }
+
+          {
+            currentPage === 'apikey-manager' && (
+              <div className="flex items-start ml-20 justify-start min-h-screen bg-white">
+              <ApiKeyManager/>
+              </div>
+            )
+          }
+          {currentPage === 'privacy_policy' && (
+          <div className="flex items-center justify-center min-h-screen bg-white">
+            <div className="w-full max-w-4xl">
+              <PrivacyPolicyPage />
+            </div>
+          </div>
+)}
+
         
         </div>
 
