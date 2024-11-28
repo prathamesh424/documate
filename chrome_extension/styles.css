@@ -185,3 +185,107 @@
   font-size: 12px;
   margin-top: 16px;
 }
+
+
+.logout-icon {
+  width: 24px;
+  height: 24px;
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path fill="%234285F4" d="M24 4C12.95 4 4 12.95 4 24s8.95 20 20 20 20-8.95 20-20S35.05 4 24 4zm0 36c-8.84 0-16-7.16-16-16S15.16 8 24 8s16 7.16 16 16-7.16 16-16 16z"/><path fill="%2334A853" d="M24 20c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/><path fill="%23FBBC05" d="M32 32l4.59-4.59L35.17 26l-6.58 6.59L24 37.17 28.59 32z"/><path fill="%23EA4335" d="M35.17 26l-6.58 6.59L24 28.41 28.59 24l6.58 6.59 1.41-1.41L32 24l4.59-4.59L35.17 18l-6.58 6.59L24 20.01l-4.59 4.59 6.58 6.59z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+
+/* login page */
+.container {
+  background-color: #ffffff;
+  border-radius: 20px;
+  padding: 40px 30px;
+  width: 240px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-image: url("./ext-banner.png");
+  background-size: cover;
+  background-position: center calc(100% - 32px);
+  background-repeat: no-repeat;
+}
+
+.illustration {
+  width: 140px;
+  height: 140px;
+  margin: 0 auto 30px;
+}
+
+h1 {
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #02006e;
+}
+
+p {
+  font-size: 16px;
+  line-height: 1.5;
+  color: #000000;
+  margin-bottom: 30px;
+}
+
+.google-btn {
+  background-color: #ffffffad;
+  color: #3c4043;
+  border: 1px solid #6500a0;
+  border-radius: 8px;
+  padding: 14px 20px;
+  font-size: 16px;
+  font-weight: 500;
+  width: 100%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.google-btn:hover {
+  background-color: #f8f9fadf;
+  border: 1px solid #6500a0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.google-btn:active {
+  background-color: #f1f3f4;
+}
+
+.google-icon {
+  width: 18px;
+  height: 18px;
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path fill="%234285F4" d="M45.12 24.5c0-1.56-.14-3.06-.4-4.5H24v8.51h11.84c-.51 2.75-2.06 5.08-4.39 6.64v5.52h7.11c4.16-3.83 6.56-9.47 6.56-16.17z"/><path fill="%2334A853" d="M24 46c5.94 0 10.92-1.97 14.56-5.33l-7.11-5.52c-1.97 1.32-4.49 2.1-7.45 2.1-5.73 0-10.58-3.87-12.31-9.07H4.34v5.7C7.96 41.07 15.4 46 24 46z"/><path fill="%23FBBC05" d="M11.69 28.18C11.25 26.86 11 25.45 11 24s.25-2.86.69-4.18v-5.7H4.34C2.85 17.09 2 20.45 2 24c0 3.55.85 6.91 2.34 9.88l7.35-5.7z"/><path fill="%23EA4335" d="M24 10.75c3.23 0 6.13 1.11 8.41 3.29l6.31-6.31C34.91 4.18 29.93 2 24 2 15.4 2 7.96 6.93 4.34 14.12l7.35 5.7c1.73-5.2 6.58-9.07 12.31-9.07z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+.loading {
+  display: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top-color: #3c4043;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.google-btn.loading .loading {
+  display: inline-block;
+}
+
+.google-btn.loading .btn-text,
+.google-btn.loading .google-icon {
+  display: none;
+}
