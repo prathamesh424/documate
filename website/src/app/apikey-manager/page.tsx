@@ -1,26 +1,26 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Switch } from "@/components/ui/switch"
-import { Card, CardContent } from "@/components/ui/card"
-import { Bot, Brain, Sparkles, Star, Trash2 } from 'lucide-react'
-import { cn } from "@/lib/utils"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import React from "react"
-import { useMutation, useQuery } from "convex/react"
-import { useUser } from "@clerk/clerk-react"
-import { api } from "../../../convex/_generated/api"
+import { useState, useEffect } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { Card, CardContent } from "@/components/ui/card";
+import { Bot, Brain, Sparkles, Star, Trash2 } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useMutation, useQuery } from "convex/react";
+import { useUser } from "@clerk/clerk-react";
+import { api } from "../../../convex/_generated/api";
+import React from "react";
 
 interface ApiKey {
-  id: string
-  provider: string
-  key: string
-  isDefault: boolean
-  isEnabled: boolean
+  id: string;
+  provider: string;
+  key: string;
+  isDefault: boolean;
+  isEnabled: boolean;
 }
 
 const AI_PROVIDERS = [
@@ -28,27 +28,29 @@ const AI_PROVIDERS = [
   { id: "gemini", name: "Google Gemini", icon: Brain },
   { id: "llama", name: "Llama", icon: Star },
   { id: "anthropic", name: "Anthropic Claude", icon: Bot },
-]
+];
 
 export default function ApiKeyManager() {
-  const [isOpen, setIsOpen] = useState(false)
-  const [selectedProvider, setSelectedProvider] = useState<string | null>(null)
-  const [apiKeys, setApiKeys] = useState<ApiKey[]>([])
-  const [newApiKey, setNewApiKey] = useState("")
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedProvider, setSelectedProvider] = useState<string | null>(null);
+  const [apiKeys, setApiKeys] = useState<ApiKey[]>([]);
+  const [newApiKey, setNewApiKey] = useState("");
 
+  const instance = useUser();
+  const user_email =
+    instance.user && instance.user.emailAddresses && instance.user.emailAddresses[0].emailAddress;
 
-  const instance = useUser()
-  const user_email = instance.user && instance.user.emailAddresses && instance.user.emailAddresses[0].emailAddress
+  const data = useQuery(api.apikey_manager.getApiKeysByEmail, { email: user_email });
 
-  const data = useQuery(api.apikey_manager.getApiKeysByEmail, { email: user_email })
- 
-   React.useEffect(() => {
+  useEffect(() => {
     if (data) {
-      setApiKeys(data)
+      setApiKeys(data);
     }
-  }, [data])
+  }, [data]);
 
-  const uploadKey = useMutation(api.apikey_manager.addOrUpdateApiKey)
+  const uploadKey = useMutation(api.apikey_manager.addOrUpdateApiKey);
+  const deleteApiKeyMutation = useMutation(api.apikey_manager.deleteApiKey);
+  const toggleEnabledMutation = useMutation(api.apikey_manager.toggleApiKeyEnabled);
 
   const handleAddKey = async () => {
     if (!selectedProvider || !newApiKey) return;
@@ -61,47 +63,58 @@ export default function ApiKeyManager() {
       isEnabled: true,
     };
 
-     try {
+    try {
       await uploadKey({
-        email: user_email,  
-        provider: selectedProvider,  
-        apiKey: newApiKey,  
-        isDefault: newKey.isDefault,  
-        isEnabled: newKey.isEnabled, 
+        email: user_email,
+        provider: selectedProvider,
+        apiKey: newApiKey,
+        isDefault: newKey.isDefault,
+        isEnabled: newKey.isEnabled,
       });
 
-       setApiKeys((prevKeys) => [...prevKeys, newKey]);
-      setIsOpen(false); 
-      setSelectedProvider(null); 
-      setNewApiKey(""); 
+      setApiKeys((prevKeys) => [...prevKeys, newKey]);
+      setIsOpen(false);
+      setSelectedProvider(null);
+      setNewApiKey("");
     } catch (error) {
       console.error("Error uploading API key:", error);
-     }
-  }
+    }
+  };
 
-  const toggleDefault = (id: string) => {
-    setApiKeys(
-      apiKeys.map((key) => ({
-        ...key,
-        isDefault: key.id === id,
-        isEnabled: key.id === id ? true : key.isEnabled, // Ensure the new default key is enabled
-      }))
-    )
-  }
+  const toggleEnabled = async (id: string) => {
+    try {
+      const keyToUpdate = apiKeys.find((key) => key.key === id);
+      if (!keyToUpdate) return;
 
-  const toggleEnabled = (id: string) => {
-    setApiKeys(
-      apiKeys.map((key) => ({
-        ...key,
-        isEnabled: key.id === id ? !key.isEnabled : key.isEnabled,
-        isDefault: key.id === id && key.isDefault ? false : key.isDefault, // Remove default status if disabling
-      }))
-    )
-  }
+      await toggleEnabledMutation({
+        email: user_email,
+        keyId: keyToUpdate.key,
+      });
+      setApiKeys((prevKeys) =>
+        prevKeys.map((key) =>
+          key.id === keyToUpdate.id ? { ...key, isEnabled: !key.isEnabled } : key
+        )
+      );
+    } catch (error) {
+      console.error("Error toggling API key:", error);
+    }
+  };
 
-  const deleteKey = (id: string) => {
-    setApiKeys(apiKeys.filter((key) => key.id !== id))
-  }
+  const deleteKey = async (id: string) => {
+    try {
+      const keyToDelete = apiKeys.find((key) => key.id === id);
+      if (!keyToDelete) return;
+
+      await deleteApiKeyMutation({
+        email: user_email,
+        provider: keyToDelete.provider,
+      });
+
+      setApiKeys((prevKeys) => prevKeys.filter((key) => key.id !== id));
+    } catch (error) {
+      console.error("Error deleting API key:", error);
+    }
+  };
 
   return (
     <div className="w-full max-w-4xl mx-auto p-6">
@@ -118,7 +131,7 @@ export default function ApiKeyManager() {
             {!selectedProvider ? (
               <div className="grid grid-cols-2 gap-4 p-4 text-white">
                 {AI_PROVIDERS.map((provider) => {
-                  const Icon = provider.icon
+                  const Icon = provider.icon;
                   return (
                     <Card
                       key={provider.id}
@@ -131,7 +144,7 @@ export default function ApiKeyManager() {
                       <Icon className="h-8 w-8" />
                       <span className="font-medium">{provider.name}</span>
                     </Card>
-                  )
+                  );
                 })}
               </div>
             ) : (
@@ -162,29 +175,6 @@ export default function ApiKeyManager() {
       </div>
 
       <div className="space-y-4">
-        <Card className="p-4">
-          <CardContent className="p-0">
-            <Label htmlFor="default-key" className="mb-2 block">
-              Default API Key
-            </Label>
-            <Select
-              onValueChange={(value) => toggleDefault(value)}
-              value={apiKeys.find((key) => key.isDefault)?.id || ""}
-            >
-              <SelectTrigger id="default-key" className="w-full">
-                <SelectValue placeholder="Select a default API key" />
-              </SelectTrigger>
-              <SelectContent>
-                {apiKeys.filter((key) => key.isEnabled).map((key) => (
-                  <SelectItem key={key.id} value={key.id}>
-                    {AI_PROVIDERS.find((p) => p.id === key.provider)?.name} - {key.key.substring(0, 6)}...
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </CardContent>
-        </Card>
-
         {apiKeys.map((key) => (
           <Card key={key.id} className="p-4">
             <CardContent className="flex items-center justify-between p-0">
@@ -204,14 +194,11 @@ export default function ApiKeyManager() {
                 </div>
               </div>
               <div className="flex items-center gap-4">
-                {key.isDefault && (
-                  <span className="text-sm text-primary font-medium">Default</span>
-                )}
                 <div className="flex items-center gap-2">
                   <Label htmlFor={`enabled-${key.id}`} className="text-sm">
-                    Enabled
+                    {`${key.isEnabled ? "Enabled" : "Disabled"}`}
                   </Label>
-                  <Switch id={`enabled-${key.id}`} checked={key.isEnabled} onCheckedChange={() => toggleEnabled(key.id)} />
+                  <Switch id={`enabled-${key.key}`} checked={key.isEnabled} onCheckedChange={() => toggleEnabled(key.key)} />
                 </div>
                 <Button variant="ghost" size="icon" onClick={() => deleteKey(key.id)}>
                   <Trash2 className="h-4 w-4" />
@@ -222,5 +209,5 @@ export default function ApiKeyManager() {
         ))}
       </div>
     </div>
-  )
+  );
 }
