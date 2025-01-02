@@ -15,6 +15,12 @@
     "48": "logo_white.png",
     "128": "logo_white.png"
   },
+  "content_scripts": [
+  {
+    "matches": ["<all_urls>"],
+    "js": ["content.js"]
+  }
+  ],
   "action": {
     "default_popup": "popup.html",
     "default_icon": "logo_white.png"

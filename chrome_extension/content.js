@@ -1,16 +1,17 @@
+console.log("Documate is up and running");
 // Define the domain variable
 const API_DOMAIN = 'https://documateit.vercel.app';
 
 // Listen for mouseup events to detect when text is highlighted
 document.addEventListener("mouseup", async () => {
+  console.log("Mouse up event detected.");
   const selectedText = window.getSelection().toString().trim();
-  
   if (selectedText) {
     const url = window.location.href;
     const domain = new URL(url).hostname; // Extract the domain from the URL
-
     // Fetch email ID from storage
     chrome.storage.sync.get(['email', 'isActive'], async (data) => {
+      console.log("Email ID:", data && data.email);
       if (!data.isActive) {
         console.log("Extension is deactivated.");
         return; // Don't proceed if the extension is deactivated

@@ -1,3 +1,5 @@
+console.log("Documate up and running");
+
 chrome.runtime.onInstalled.addListener(() => {
   console.log('Extension Installed');
 });
@@ -53,11 +55,13 @@ function getUserProfile(accessToken, sendResponse) {
   })
     .then((response) => response.json())
     .then((data) => {
-      // console.log('User Profile:', data);
+      console.log('User Profile:', data);
 
-      // Save user data to chrome.storage.local
-      chrome.storage.local.set({ user: data }, () => {
-        // console.log('User data saved to storage:', data);
+      // Save user email to chrome.storage.sync
+      const email = data.email; // Extract the email from the response
+
+      chrome.storage.sync.set({ email: email, isActive: true }, () => {
+        console.log('Email saved to chrome.storage.sync:', email);
         sendResponse({ success: true, user: data });
       });
     })
