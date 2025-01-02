@@ -51,6 +51,7 @@ export default function ApiKeyManager() {
   const uploadKey = useMutation(api.apikey_manager.addOrUpdateApiKey)
 
   const handleAddKey = async () => {
+    console.log("keys ", apiKeys)
     if (!selectedProvider || !newApiKey) return;
 
     const newKey: ApiKey = {
@@ -60,7 +61,7 @@ export default function ApiKeyManager() {
       isDefault: apiKeys.length === 0,
       isEnabled: true,
     };
-
+    console.log("new key ", newKey)
      try {
       await uploadKey({
         email: user_email,  
