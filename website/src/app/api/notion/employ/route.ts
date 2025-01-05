@@ -17,6 +17,7 @@ export async function GET() {
 }
 */
 
+/*
 export async function GET() {
   try {
     const data = await getDatabase(); // Fetch data from Notion
@@ -37,5 +38,22 @@ export async function GET() {
       { error: "Failed to fetch data" },
       { status: 500 }
     );
+  }
+}
+
+*/
+
+import { notion, databaseId } from "@/lib/notion";
+
+export async function GET() {
+  try {
+    const response = await notion.databases.query({
+      database_id: databaseId!, // Use the shared database ID
+    });
+
+    return NextResponse.json({ success: true, data: response.results });
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return NextResponse.json({ success: false, error: "Failed to fetch data" }, { status: 500 });
   }
 }

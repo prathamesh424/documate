@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import ConvexClientProvider from "./ConvexClientProvider";
 import { ClerkProvider, useAuth } from "@clerk/clerk-react";
 import { ConvexProviderWithClerk } from "convex/react-clerk";
-import Head from 'next/head';
+import Head from "next/head";
 import "./globals.css";
 import Header from "./Header";
 import { Toaster } from "@/components/ui_copy/toaster";
@@ -23,19 +23,19 @@ export default function RootLayout({
   return (
     <html lang="en">
       <Head>
-      <link  href="favicon.ico" />
-    </Head>
+        <link href="favicon.ico" />
+      </Head>
       <body className={inter.className}>
-        <div className="flex flex-col h-screen w-screen bg-black m-0 p-0">
-        <ConvexClientProvider>
-        <main className="container flex-grow m-0 bg-black p-0">
-        {children}
-        </main >
-        <Toaster />
-        </ConvexClientProvider>
-        {/* <footer className="flex justify-center items-center">Made with ❤️ and&nbsp;<a href="https://convex.dev" target="_blank">Convex</a></footer> */}
+        <div className="flex w-screen justify-center bg-black m-0 p-0">
+          <ConvexClientProvider>
+            <main className="container flex-grow m-0 bg-black p-0">
+              {children}
+            </main>
+            <Toaster />
+          </ConvexClientProvider>
+          {/* <footer className="flex justify-center items-center">Made with ❤️ and&nbsp;<a href="https://convex.dev" target="_blank">Convex</a></footer> */}
         </div>
-        </body>
+      </body>
     </html>
   );
 }

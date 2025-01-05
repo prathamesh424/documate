@@ -90,5 +90,14 @@ export default defineSchema({
         })
       ),
     }).index("by_email", ["email"]),
-  
+
+
+    userSecrets: defineTable({
+      email: v.string(),
+      encryptedToken: v.string(),
+    }),
+    editorContents: defineTable({
+      content: v.string(),
+      createdAt: v.string(),
+    }),
 });

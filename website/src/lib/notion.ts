@@ -1,10 +1,7 @@
+/*
+
 import "server-only";
 import { Client } from "@notionhq/client";
-import React from "react";
-import {
-  BlockObjectResponse,
-  PageObjectResponse,
-} from "@notionhq/client/build/src/api-endpoints";
 
 export const notion = new Client({
   auth: process.env.NOTION_TOKEN,
@@ -45,6 +42,7 @@ export const fetchPaageBlocks = React.cache((pageId:string) => {
 })
 */
 
+/*
 // read operation
 export const getDatabase = async () => {
   try {
@@ -57,3 +55,20 @@ export const getDatabase = async () => {
     throw error;
   }
 };
+*/
+
+
+
+import { Client } from "@notionhq/client";
+
+// Initialize Notion client
+export const notion = new Client({
+  auth: process.env.NOTION_TOKEN, // Token from environment variables
+});
+
+// Centralize the database ID
+export const databaseId = process.env.NOTION_DATABASE_ID;
+
+if (!databaseId) {
+  throw new Error("NOTION_DATABASE_ID is not set in environment variables");
+}

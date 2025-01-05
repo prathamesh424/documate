@@ -1,24 +1,25 @@
 {
-  /* This TypeScript project config describes the environment that
-   * Convex functions run in and is used to typecheck them.
-   * You can modify it, but some settings required to use Convex.
-   */
   "compilerOptions": {
     /* These settings are not required by Convex and can be modified. */
     "allowJs": true,
-    "strict": true,
+    "strict": true,  // Enables strict type checking options.
 
     /* These compiler options are required by Convex */
-    "target": "ESNext",
-    "lib": ["ES2021", "dom"],
-    "forceConsistentCasingInFileNames": true,
-    "allowSyntheticDefaultImports": true,
-    "module": "ESNext",
-    "moduleResolution": "Node",
-    "isolatedModules": true,
-    "skipLibCheck": true,
-    "noEmit": true
+    "target": "ESNext",  // Ensures latest JavaScript features.
+    "lib": ["ES2021", "dom"],  // Defines the library files to include.
+    "forceConsistentCasingInFileNames": true,  // Ensures consistent case in filenames.
+    "allowSyntheticDefaultImports": true,  // Allows default imports even if the module doesn't have a default export.
+    "module": "ESNext",  // Enables support for ES modules.
+    "moduleResolution": "Node",  // Resolves modules as Node does.
+    "isolatedModules": true,  // Ensures compatibility with tools like Babel and TypeScript in a multi-module environment.
+    "skipLibCheck": true,  // Skips type checking of declaration files to improve performance.
+    "noEmit": true,  // Prevents emitting output files, as this is mainly for type checking.
+    "esModuleInterop": true  // Ensures compatibility with CommonJS modules.
   },
-  "include": ["./**/*"],
-  "exclude": ["./_generated"]
+  "include": [
+    "./**/*"  // Includes all files in the project for type checking.
+  ],
+  "exclude": [
+    "./_generated"  // Excludes auto-generated files, typically for internal purposes.
+  ]
 }
