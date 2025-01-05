@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Set up sign-in button
   document.getElementById("main-body").addEventListener("click", (event) => {
-    if (event.target.id === "sign-in-button") {
+    if (event.target.id === "sign-in-button" || event.target.closest("#sign-in-button") || event.target.classList.contains("google-icon") || event.target.classList.contains("btn-text") || event.target.classList.contains("loading")) {
       console.log("login clicked")
       chrome.runtime.sendMessage({ type: "authenticate" }, (response) => {
         if (response.success) {
@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
             displayUserData(response.user); // Update UI with user data
           });
         } else {
-          console.error("Authentication failed:", response.error);
+          alert("Authentication failed:", response.error);
         }
       });
     }
