@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Set up sign-in button
   document.getElementById("main-body").addEventListener("click", (event) => {
     if (event.target.id === "sign-in-button") {
+      console.log("login clicked")
       chrome.runtime.sendMessage({ type: "authenticate" }, (response) => {
         if (response.success) {
           chrome.storage.local.set({ user: response.user }, () => {
@@ -30,18 +31,18 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function displayUserData(user) {
+  console.log("user is ",user)
   // Display user data in the UI
   document.getElementById("main-body").innerHTML = `
     <div class="card">
         <div class="header">
-            <div class="profile">
+            <div class="controls">
+                <button class="control-btn" id="logout-button">👋🏽</button>
+                <div class="profile">
                 <div class="profile-img">
                   <img src="${user.picture}">
                 </div>
             </div>
-            <div class="controls">
-                <button class="control-btn" id="logout-button">🏃‍♂️</button>
-                <button class="control-btn vp-btn">VP</button>
             </div>
         </div>
 
@@ -100,10 +101,11 @@ function showLoginPage() {
   // Reset the UI to show the login page
   document.getElementById("main-body").innerHTML = `
     <div class="container">
+      Documate
         <div class="illustration">
         </div>
         <h1>Get started</h1>
-        <p>Connect your Chrome Extension with your CoinTracker account.</p>
+        <p>Continue your Documate journey by logging in with your email.</p>
         <button class="google-btn" id="sign-in-button">
             <span class="google-icon"></span>
             <span class="btn-text">Continue with Google</span>
@@ -112,32 +114,3 @@ function showLoginPage() {
     </div>
   `;
 }
-
-
-
-// function showLoginPage() {
-//   // Reset the UI to show the login page
-//   document.getElementById("main-body").innerHTML = `
-//     <header>
-//       <h1>Welcome</h1>
-//       <p id="login-prompt">Sign in to access features.</p>
-//     </header>
-//     <button id="sign-in-button">
-//       <svg
-//         xmlns="http://www.w3.org/2000/svg"
-//         width="18"
-//         height="18"
-//         viewBox="0 0 24 24"
-//         fill="none"
-//         stroke="currentColor"
-//         stroke-width="2"
-//         stroke-linecap="round"
-//         stroke-linejoin="round"
-//       >
-//         <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-//         <polyline points="22,6 12,13 2,6"></polyline>
-//       </svg>
-//       Sign in with Google
-//     </button>
-//   `;
-// }

@@ -8,9 +8,11 @@
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
+
+
 .header {
   display: flex;
-  justify-content: space-between;
+  justify-content: end;
   align-items: center;
   margin-bottom: 20px;
 }
@@ -205,10 +207,6 @@
   width: 240px;
   text-align: center;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  background-image: url("./ext-banner.png");
-  background-size: cover;
-  background-position: center calc(100% - 32px);
-  background-repeat: no-repeat;
 }
 
 .illustration {
